@@ -98,7 +98,7 @@ export default function HomePage() {
                             <div className="w-11 h-11 bg-gradient-to-tr from-primary-600 to-blue-500 rounded-2xl flex items-center justify-center shadow-xl shadow-primary-200 group-hover:rotate-6 transition-transform">
                                 <GraduationCap className="text-white" size={26} />
                             </div>
-                            <span className="text-2xl font-black text-slate-900 tracking-tighter font-heading">Shalom<span className="text-primary-600">EDU</span></span>
+                            <span className="text-2xl font-black text-slate-900 tracking-tighter font-heading">COLLEGEMOBI<span className="text-primary-600">EDU</span></span>
                         </motion.div>
 
                         <div className="hidden md:flex items-center gap-10">
@@ -497,7 +497,7 @@ export default function HomePage() {
                                 <div className="w-14 h-14 bg-primary-600 rounded-[1.5rem] flex items-center justify-center shadow-2xl ring-4 ring-primary-100">
                                     <GraduationCap className="text-white" size={32} />
                                 </div>
-                                <span className="text-3xl font-black text-slate-900 tracking-tighter font-heading">Shalom EDU</span>
+                                <span className="text-3xl font-black text-slate-900 tracking-tighter font-heading">COLLEGEMOBI EDU</span>
                             </div>
                             <p className="text-slate-500 max-w-md font-medium text-xl leading-relaxed">
                                 Redefining digital pedagogy through intelligent design and seamless user experience.
@@ -535,7 +535,7 @@ export default function HomePage() {
                     </div>
                     <div className="pt-12 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-10">
                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] font-space">
-                            © 2026 Shalom EDU. Engineered for Excellence.
+                            © 2026 COLLEGEMOBI EDU. Engineered for Excellence.
                         </p>
                         <div className="flex gap-10">
                             <span className="text-[10px] font-black text-slate-400 hover:text-primary-600 uppercase tracking-[0.3em] font-space cursor-pointer transition-colors">Privacy</span>

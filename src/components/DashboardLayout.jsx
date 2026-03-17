@@ -65,7 +65,7 @@ export default function DashboardLayout({ children }) {
                 </div>
                 {!collapsed && (
                     <div className="animate-fade-in">
-                        <div className="text-white font-black text-xl leading-none tracking-tighter">Shalom<span className="text-primary-300">EDU</span></div>
+                        <div className="text-white font-black text-xl leading-none tracking-tighter">COLLEGEMOBI<span className="text-primary-300">EDU</span></div>
                     </div>
                 )}
             </div>
