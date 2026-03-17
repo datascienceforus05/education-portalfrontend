@@ -3,7 +3,7 @@ import { getMyCourses, createCourse } from "../../api";
 import toast from "react-hot-toast";
 import { Plus, X, BookOpen, Users, ClipboardList, FileText, Mail, Phone, Calendar } from "lucide-react";
 
-const CATEGORIES = ["Mathematics", "Science", "Computer Science", "English", "History", "Physics", "Chemistry", "Biology", "Commerce", "Arts", "Other"];
+const CATEGORIES = ["IT", "Engineering", "Medical", "Skill Development", "Management", "General Science", "Languages", "Other"];
 
 export default function FacultyCourses() {
     const [courses, setCourses] = useState([]);
