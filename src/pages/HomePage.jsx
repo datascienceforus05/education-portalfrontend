@@ -1,0 +1,550 @@
+import { useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+import { GraduationCap, BookOpen, Users, Award, ArrowRight, PlayCircle, Globe, ShieldCheck } from "lucide-react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
+
+export default function HomePage() {
+    const heroRef = useRef(null);
+    const titleRef = useRef(null);
+    const containerRef = useRef(null);
+
+    const { scrollYProgress } = useScroll({
+        target: containerRef,
+        offset: ["start start", "end end"]
+    });
+
+    const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+
+    useEffect(() => {
+        // Hero Section Animation
+        if (titleRef.current) {
+            gsap.fromTo(titleRef.current, 
+                { opacity: 0, y: 30 },
+                { opacity: 1, y: 0, duration: 1.2, ease: "power3.out", delay: 0.5 }
+            );
+        }
+
+        // Section Entrances
+        const sections = document.querySelectorAll('section:not(.hero-trigger)');
+        sections.forEach(section => {
+            gsap.fromTo(section, 
+                { opacity: 0, y: 50 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: section,
+                        start: "top 85%",
+                        toggleActions: "play none none none"
+                    }
+                }
+            );
+        });
+
+        // Ensure Hero is visible immediately
+        gsap.to('.hero-trigger', { opacity: 1, duration: 0.5 });
+        
+        // Refresh ScrollTrigger after a short delay
+        const timer = setTimeout(() => {
+            ScrollTrigger.refresh();
+        }, 1000);
+        
+        return () => {
+            clearTimeout(timer);
+            ScrollTrigger.getAll().forEach(t => t.kill());
+        };
+    }, []);
+
+    const scrollToSection = (id) => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
+    return (
+        <div ref={containerRef} className="relative min-h-screen bg-white font-sans selection:bg-primary-100 selection:text-primary-700 overflow-x-hidden">
+            {/* Custom Fonts Applied via Class */}
+            <style dangerouslySetInnerHTML={{ __html: `
+                .font-heading { font-family: 'Outfit', sans-serif; }
+                .font-space { font-family: 'Space Grotesk', sans-serif; }
+                .text-gradient {
+                    background: linear-gradient(135deg, #2563eb 0%, #7c3aed 50%, #db2777 100%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                }
+            `}} />
+
+            {/* Navigation */}
+            <motion.nav 
+                initial={{ y: -100 }}
+                animate={{ y: 0 }}
+                transition={{ duration: 0.8, ease: "circOut" }}
+                className="fixed w-full z-50 bg-white/80 backdrop-blur-2xl border-b border-slate-200/50"
+            >
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex justify-between items-center h-20">
+                        <motion.div 
+                            whileHover={{ scale: 1.02 }}
+                            className="flex items-center gap-3 group cursor-pointer" 
+                            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                        >
+                            <div className="w-11 h-11 bg-gradient-to-tr from-primary-600 to-blue-500 rounded-2xl flex items-center justify-center shadow-xl shadow-primary-200 group-hover:rotate-6 transition-transform">
+                                <GraduationCap className="text-white" size={26} />
+                            </div>
+                            <span className="text-xl font-black text-slate-900 tracking-tighter font-heading">Education<span className="text-primary-600">Portal</span></span>
+                        </motion.div>
+
+                        <div className="hidden md:flex items-center gap-10">
+                            {['Features', 'Stats', 'About'].map((item) => (
+                                <button
+                                    key={item}
+                                    onClick={() => scrollToSection(item.toLowerCase())}
+                                    className="text-sm font-bold text-slate-600 hover:text-primary-600 transition-colors uppercase tracking-widest font-space"
+                                >
+                                    {item}
+                                </button>
+                            ))}
+                        </div>
+
+                        <div className="flex items-center gap-4">
+                            <Link to="/login" className="hidden sm:block px-6 py-2.5 text-sm font-bold text-slate-700 hover:text-primary-600 transition-colors font-space">
+                                Sign In
+                            </Link>
+                            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                                <Link to="/register" className="px-7 py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-2xl text-sm font-black shadow-2xl shadow-slate-200 transition-all font-space">
+                                    Join Free
+                                </Link>
+                            </motion.div>
+                        </div>
+                    </div>
+                </div>
+            </motion.nav>
+
+            {/* Hero Section */}
+            <section ref={heroRef} className="hero-trigger relative pt-32 lg:pt-48 pb-20 overflow-hidden bg-white">
+                <motion.div 
+                    style={{ y: backgroundY }}
+                    className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full -z-10"
+                >
+                    <div className="absolute top-[5%] -right-[10%] w-[800px] h-[800px] bg-primary-50 rounded-full blur-[150px] opacity-60" />
+                    <div className="absolute bottom-[5%] -left-[10%] w-[800px] h-[800px] bg-blue-50 rounded-full blur-[150px] opacity-60" />
+                </motion.div>
+
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex flex-col lg:flex-row items-center gap-16">
+                        <div className="flex-1 text-center lg:text-left">
+                            <motion.div 
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ duration: 0.5, delay: 0.5 }}
+                                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white shadow-sm border border-slate-100 text-primary-700 mb-8"
+                            >
+                                <div className="w-2 h-2 bg-primary-600 rounded-full animate-ping" />
+                                <span className="text-xs font-black uppercase tracking-[0.2em] font-space text-slate-500">Next-Gen Learning 2026</span>
+                            </motion.div>
+
+                            <h1 ref={titleRef} className="text-6xl lg:text-[6.5rem] font-black text-slate-900 leading-[0.95] tracking-tight mb-8 font-heading">
+                                Master Your <br />
+                                <span className="text-gradient">Future Skills</span>
+                            </h1>
+
+                            <motion.p 
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.8, delay: 0.8 }}
+                                className="text-xl text-slate-500 mb-12 leading-relaxed max-w-xl mx-auto lg:mx-0 font-medium"
+                            >
+                                A premium educational ecosystem designed to bridge the gap between students and expert faculty through interactive learning experiences.
+                            </motion.p>
+
+                            <motion.div 
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.8, delay: 1 }}
+                                className="flex flex-col sm:flex-row items-center gap-5 justify-center lg:justify-start"
+                            >
+                                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full sm:w-auto">
+                                    <Link to="/register" className="w-full sm:w-auto px-10 py-5 bg-primary-600 hover:bg-primary-700 text-white rounded-[2rem] font-black text-lg shadow-2xl shadow-primary-200 transition-all flex items-center justify-center gap-2 group font-space">
+                                        Get Started Now <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                                    </Link>
+                                </motion.div>
+                                <motion.button 
+                                    whileHover={{ scale: 1.05 }} 
+                                    whileTap={{ scale: 0.95 }}
+                                    className="w-full sm:w-auto px-10 py-5 bg-white text-slate-700 rounded-[2rem] font-black text-lg shadow-lg border border-slate-100 transition-all hover:bg-slate-50 flex items-center justify-center gap-2 font-space"
+                                >
+                                    <PlayCircle size={22} className="text-primary-600" /> Watch Demo
+                                </motion.button>
+                            </motion.div>
+
+                            <motion.div 
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 1.2 }}
+                                className="mt-12 flex items-center gap-6 justify-center lg:justify-start"
+                            >
+                                <div className="flex -space-x-4">
+                                    {[1, 2, 3, 4].map(i => (
+                                        <motion.img 
+                                            key={i} 
+                                            whileHover={{ y: -5, zIndex: 10 }}
+                                            className="w-12 h-12 rounded-full border-4 border-white shadow-md cursor-pointer" 
+                                            src={`https://i.pravatar.cc/100?img=${i + 15}`} 
+                                            alt="User" 
+                                        />
+                                    ))}
+                                    <div className="w-12 h-12 rounded-full border-4 border-white bg-slate-900 text-white text-[10px] flex items-center justify-center font-bold shadow-md">+12k</div>
+                                </div>
+                                <div className="text-sm font-bold text-slate-400 uppercase tracking-widest font-space">Global Students</div>
+                            </motion.div>
+                        </div>
+
+                        <motion.div 
+                            initial={{ opacity: 0, x: 100 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 1, ease: "power3.out", delay: 0.5 }}
+                            className="flex-1 w-full max-w-2xl relative"
+                        >
+                            <div className="relative z-10 rounded-[3.5rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] border-[15px] border-white ring-1 ring-slate-100">
+                                <motion.img 
+                                    whileHover={{ scale: 1.05 }}
+                                    transition={{ duration: 1.5 }}
+                                    src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop" 
+                                    alt="Learning" 
+                                    className="w-full h-auto object-cover" 
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent" />
+                                <motion.div 
+                                    initial={{ y: 50, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    transition={{ delay: 1, duration: 0.8 }}
+                                    className="absolute bottom-10 left-10 right-10 bg-white/90 backdrop-blur-xl p-8 rounded-[2.5rem] flex items-center justify-between shadow-2xl"
+                                >
+                                    <div>
+                                        <p className="text-primary-600 text-xs font-black uppercase tracking-widest mb-1 font-space">Live Session</p>
+                                        <h4 className="font-black text-slate-900 text-xl font-heading">Advanced UI Architecture</h4>
+                                    </div>
+                                    <div className="bg-red-500 text-white text-[10px] font-black px-4 py-2 rounded-full animate-pulse uppercase tracking-widest font-space">Live</div>
+                                </motion.div>
+                            </div>
+                            {/* Decorative element */}
+                            <motion.div 
+                                animate={{ 
+                                    scale: [1, 1.1, 1],
+                                    rotate: [0, 5, 0]
+                                }}
+                                transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                                className="absolute -bottom-16 -right-16 w-64 h-64 bg-blue-600/20 rounded-full blur-[80px] -z-10" 
+                            />
+                            <motion.div 
+                                animate={{ 
+                                    scale: [1, 1.2, 1],
+                                    rotate: [0, -5, 0]
+                                }}
+                                transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+                                className="absolute -top-16 -left-16 w-64 h-64 bg-primary-600/20 rounded-full blur-[80px] -z-10" 
+                            />
+                        </motion.div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Features Grid */}
+            <section id="features" className="py-40 bg-white relative">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center mb-24 max-w-4xl mx-auto">
+                        <motion.div 
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            className="text-primary-600 font-black uppercase tracking-[0.4em] text-xs mb-6 font-space"
+                        >
+                            The Future of Education
+                        </motion.div>
+                        <h2 className="text-5xl lg:text-6xl font-black text-slate-900 mb-8 font-heading">Powerful Tools for Growth</h2>
+                        <p className="text-xl text-slate-500 font-medium leading-relaxed">Experience a seamless integration of learning and management in one ultra-responsive dashboard.</p>
+                    </div>
+
+                    <div className="grid md:grid-cols-3 gap-12">
+                        {[
+                            {
+                                title: "Smart Course Library",
+                                desc: "High-definition course materials with categorized modules and interactive study guides.",
+                                img: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=2073&auto=format&fit=crop",
+                                icon: BookOpen,
+                                color: "from-blue-600 to-cyan-500",
+                                tags: ["PDFs", "Videos", "Docs"]
+                            },
+                            {
+                                title: "Automated Exams",
+                                desc: "Timed testing environment with automatic grading and comprehensive performance analytics.",
+                                img: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=2070&auto=format&fit=crop",
+                                icon: Award,
+                                color: "from-amber-500 to-orange-400",
+                                tags: ["Real-time", "Secure", "Instant"]
+                            },
+                            {
+                                title: "Live Collaboration",
+                                desc: "Real-time communication tools connecting students directly with subject matter experts.",
+                                img: "https://images.unsplash.com/photo-1515162305285-0293e4767cc2?q=80&w=2071&auto=format&fit=crop",
+                                icon: Users,
+                                color: "from-emerald-500 to-teal-400",
+                                tags: ["Chat", "Video", "Screen"]
+                            },
+                        ].map((feature, i) => (
+                            <motion.div 
+                                key={i} 
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ delay: i * 0.1 }}
+                                viewport={{ once: true }}
+                                whileHover={{ y: -15 }}
+                                className="group relative bg-white rounded-[3rem] overflow-hidden shadow-2xl border border-slate-100 h-full flex flex-col"
+                            >
+                                <div className="h-72 overflow-hidden relative">
+                                    <motion.img 
+                                        whileHover={{ scale: 1.15 }}
+                                        transition={{ duration: 1 }}
+                                        src={feature.img} 
+                                        alt={feature.title} 
+                                        className="w-full h-full object-cover" 
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent" />
+                                    <div className="absolute top-8 right-8">
+                                        <div className={`bg-gradient-to-tr ${feature.color} rounded-2xl p-4 shadow-2xl`}>
+                                            <feature.icon className="text-white" size={28} />
+                                        </div>
+                                    </div>
+                                    <div className="absolute bottom-8 left-8 flex gap-3">
+                                        {feature.tags.map(tag => (
+                                            <span key={tag} className="px-4 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-black uppercase tracking-widest rounded-xl">{tag}</span>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="p-12 flex-1 flex flex-col">
+                                    <h3 className="text-3xl font-black text-slate-900 mb-6 group-hover:text-primary-600 transition-colors font-heading">{feature.title}</h3>
+                                    <p className="text-slate-500 leading-relaxed font-medium mb-10 flex-1 text-lg">{feature.desc}</p>
+                                    <button className="flex items-center gap-3 text-sm font-black text-primary-600 group-hover:gap-5 transition-all uppercase tracking-[0.2em] font-space">
+                                        Explore System <ArrowRight size={18} />
+                                    </button>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* Stats Section */}
+            <section id="stats" className="py-32 bg-slate-900 overflow-hidden relative">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary-900/20 via-slate-900 to-slate-900" />
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-16 lg:gap-8">
+                        {[
+                            { value: "12,480", label: "Active Students", icon: Users },
+                            { value: "580+", label: "Expert Faculty", icon: GraduationCap },
+                            { value: "95.4%", label: "Average Growth", icon: Award },
+                            { value: "24/7", label: "Global Support", icon: Globe },
+                        ].map((stat, i) => (
+                            <motion.div 
+                                key={i} 
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
+                                transition={{ delay: i * 0.1 }}
+                                className="text-center group"
+                            >
+                                <div className="flex justify-center mb-6">
+                                    <motion.div 
+                                        whileHover={{ rotate: 360, scale: 1.1 }}
+                                        transition={{ duration: 0.8, ease: "backOut" }}
+                                        className="p-5 bg-white/5 border border-white/10 rounded-3xl text-primary-400 group-hover:bg-primary-500 group-hover:text-white transition-all shadow-2xl"
+                                    >
+                                        <stat.icon size={32} />
+                                    </motion.div>
+                                </div>
+                                <div className="text-5xl lg:text-6xl font-black text-white mb-3 tracking-tighter font-heading uppercase">{stat.value}</div>
+                                <div className="text-slate-500 font-black uppercase tracking-[0.3em] text-xs font-space">{stat.label}</div>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* About Section */}
+            <section id="about" className="py-40 bg-slate-50 overflow-hidden">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex flex-col lg:flex-row items-center gap-32">
+                        <div className="flex-1 space-y-12">
+                            <motion.div 
+                                initial={{ opacity: 0, x: -50 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                className="text-primary-600 font-black uppercase tracking-[0.4em] text-xs font-space"
+                            >
+                                Our Commitment
+                            </motion.div>
+                            <h2 className="text-5xl lg:text-6xl font-black text-slate-900 leading-[1.1] font-heading">Empowering Minds <br /> Globally</h2>
+                            <p className="text-2xl text-slate-500 leading-relaxed font-medium">
+                                We&apos;ve engineered a platform where curiosity meets technology. A space where knowledge isn&apos;t just delivered, but experienced.
+                            </p>
+                            <div className="grid sm:grid-cols-2 gap-8">
+                                {[
+                                    { title: "Academic Rigor", text: "Verified curriculum standards" },
+                                    { title: "Student Privacy", text: "Enterprise-grade security" },
+                                    { title: "Modern Stack", text: "Built with React & GSAP" },
+                                    { title: "Global Reach", text: "Localized learning paths" },
+                                ].map((item, i) => (
+                                    <motion.div 
+                                        key={i} 
+                                        whileHover={{ x: 10 }}
+                                        className="flex gap-5 p-6 bg-white rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all"
+                                    >
+                                        <div className="mt-1">
+                                            <div className="p-3 bg-primary-50 rounded-2xl">
+                                                <ShieldCheck size={24} className="text-primary-600" />
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h4 className="font-black text-slate-900 text-lg font-heading">{item.title}</h4>
+                                            <p className="text-slate-500 text-sm font-medium font-space">{item.text}</p>
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="flex-1 relative">
+                            <div className="relative z-10 grid grid-cols-2 gap-8">
+                                <div className="space-y-8 pt-16">
+                                    <motion.div 
+                                        whileHover={{ scale: 0.95, rotate: -2 }}
+                                        className="rounded-[3rem] overflow-hidden shadow-2xl h-[400px]"
+                                    >
+                                        <img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?q=80&w=2070&auto=format&fit=crop" alt="Edu" className="w-full h-full object-cover" />
+                                    </motion.div>
+                                    <motion.div 
+                                        whileHover={{ scale: 0.95, rotate: 2 }}
+                                        className="rounded-[3rem] overflow-hidden shadow-2xl h-[300px]"
+                                    >
+                                        <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=2070&auto=format&fit=crop" alt="Edu" className="w-full h-full object-cover" />
+                                    </motion.div>
+                                </div>
+                                <div className="space-y-8">
+                                    <motion.div 
+                                        whileHover={{ scale: 0.95, rotate: 2 }}
+                                        className="rounded-[3rem] overflow-hidden shadow-2xl h-[300px]"
+                                    >
+                                        <img src="https://images.unsplash.com/photo-1571260899304-425ffa237937?q=80&w=2070&auto=format&fit=crop" alt="Edu" className="w-full h-full object-cover" />
+                                    </motion.div>
+                                    <motion.div 
+                                        whileHover={{ scale: 0.95, rotate: -2 }}
+                                        className="rounded-[3rem] overflow-hidden shadow-2xl h-[400px]"
+                                    >
+                                        <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=2070&auto=format&fit=crop" alt="Edu" className="w-full h-full object-cover" />
+                                    </motion.div>
+                                </div>
+                            </div>
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[140%] bg-white rounded-full -z-10 blur-[100px] opacity-60" />
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* CTA Section */}
+            <section className="py-40 bg-white">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <motion.div 
+                        whileHover={{ scale: 0.99 }}
+                        className="bg-slate-900 rounded-[4.5rem] p-16 lg:p-32 text-center relative overflow-hidden group shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)]"
+                    >
+                        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary-600/30 rounded-full blur-[150px] group-hover:scale-125 transition-transform duration-1000" />
+                        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-600/30 rounded-full blur-[150px] group-hover:scale-125 transition-transform duration-1000" />
+
+                        <div className="relative z-10 w-full max-w-5xl mx-auto">
+                            <h2 className="text-6xl lg:text-[7.5rem] font-black text-white mb-10 tracking-[ -0.05em] leading-[0.9] font-heading">
+                                Start Your <br /> Evolution Today
+                            </h2>
+                            <p className="text-2xl text-slate-400 mb-16 max-w-3xl mx-auto font-medium leading-relaxed font-space">
+                                Join the world&apos;s most innovative educational ecosystem. No limits, just potential.
+                            </p>
+                            <div className="flex flex-col sm:flex-row items-center justify-center gap-8">
+                                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="w-full sm:w-auto">
+                                    <Link to="/register" className="w-full sm:w-auto px-16 py-6 bg-white hover:bg-slate-50 text-slate-900 rounded-[2.5rem] font-black text-xl transition-all shadow-2xl flex items-center justify-center gap-3 font-space">
+                                        Join for Free <ArrowRight size={24} />
+                                    </Link>
+                                </motion.div>
+                                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="w-full sm:w-auto">
+                                    <Link to="/login" className="w-full sm:w-auto px-16 py-6 bg-transparent border-2 border-slate-700 hover:border-slate-500 text-white rounded-[2.5rem] font-black text-xl transition-all flex items-center justify-center gap-2 font-space">
+                                        Partner Portal
+                                    </Link>
+                                </motion.div>
+                            </div>
+                        </div>
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* Footer */}
+            <footer className="py-32 bg-slate-50 border-t border-slate-200">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="grid md:grid-cols-4 gap-20 mb-20">
+                        <div className="col-span-2 space-y-10">
+                            <div className="flex items-center gap-4">
+                                <div className="w-14 h-14 bg-primary-600 rounded-[1.5rem] flex items-center justify-center shadow-2xl ring-4 ring-primary-100">
+                                    <GraduationCap className="text-white" size={32} />
+                                </div>
+                                <span className="text-3xl font-black text-slate-900 tracking-tighter font-heading">Education Portal</span>
+                            </div>
+                            <p className="text-slate-500 max-w-md font-medium text-xl leading-relaxed">
+                                Redefining digital pedagogy through intelligent design and seamless user experience.
+                            </p>
+                            <div className="flex gap-6">
+                                {['tw', 'fb', 'ig', 'li'].map(social => (
+                                    <motion.div 
+                                        key={social} 
+                                        whileHover={{ y: -5, scale: 1.1 }}
+                                        className="w-14 h-14 bg-white rounded-2xl border border-slate-200 flex items-center justify-center text-slate-400 hover:text-primary-600 hover:border-primary-200 cursor-pointer transition-all shadow-lg"
+                                    >
+                                        <Globe size={24} />
+                                    </motion.div>
+                                ))}
+                            </div>
+                        </div>
+                        <div>
+                            <h4 className="font-black text-slate-900 uppercase tracking-[0.3em] text-xs mb-10 font-space">Explore</h4>
+                            <ul className="space-y-6">
+                                {['Features', 'Stats', 'About', 'Pricing'].map(l => (
+                                    <li key={l}>
+                                        <button onClick={() => scrollToSection(l.toLowerCase())} className="text-slate-500 font-bold hover:text-primary-600 transition-colors uppercase tracking-[0.2em] text-[10px] font-space text-left">{l}</button>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 className="font-black text-slate-900 uppercase tracking-[0.3em] text-xs mb-10 font-space">Contact</h4>
+                            <ul className="space-y-6 font-space">
+                                <li className="text-slate-500 font-bold text-[10px] uppercase tracking-[0.2em]">support@eduportal.com</li>
+                                <li className="text-slate-500 font-bold text-[10px] uppercase tracking-[0.2em]">+1 (555) 0123 4567</li>
+                                <li className="text-slate-500 font-bold text-[10px] uppercase tracking-[0.2em]">Tech District, Global</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div className="pt-12 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-10">
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] font-space">
+                            © 2026 Education Portal. Engineered for Excellence.
+                        </p>
+                        <div className="flex gap-10">
+                            <span className="text-[10px] font-black text-slate-400 hover:text-primary-600 uppercase tracking-[0.3em] font-space cursor-pointer transition-colors">Privacy</span>
+                            <span className="text-[10px] font-black text-slate-400 hover:text-primary-600 uppercase tracking-[0.3em] font-space cursor-pointer transition-colors">Terms</span>
+                            <span className="text-[10px] font-black text-slate-400 hover:text-primary-600 uppercase tracking-[0.3em] font-space cursor-pointer transition-colors">Legal</span>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    );
+}
