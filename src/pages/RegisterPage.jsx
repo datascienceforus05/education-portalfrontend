@@ -3,7 +3,8 @@ import PropTypes from "prop-types";
 import { Link, useNavigate } from "react-router-dom";
 import { registerStudent, registerFaculty } from "../api";
 import toast from "react-hot-toast";
-import { Eye, EyeOff, User, BookOpen, ArrowLeft } from "lucide-react";
+import { Eye, EyeOff, User, BookOpen, ArrowLeft, CheckCircle2 } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
 
 export default function RegisterPage({ type = "student" }) {
     const [form, setForm] = useState({
@@ -13,7 +14,10 @@ export default function RegisterPage({ type = "student" }) {
     const [showPass, setShowPass] = useState(false);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
     const isFaculty = type === "faculty";
+    const courseId = searchParams.get("courseId");
+    const courseName = searchParams.get("courseName");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -24,7 +28,8 @@ export default function RegisterPage({ type = "student" }) {
                 toast.success("Registration submitted! Awaiting admin approval.");
                 navigate("/login");
             } else {
-                await registerStudent(form);
+                const submitData = courseId ? { ...form, courseId } : form;
+                await registerStudent(submitData);
                 toast.success("Account created! Please login.");
                 navigate("/login");
             }
@@ -49,22 +54,25 @@ export default function RegisterPage({ type = "student" }) {
             </div>
 
             <div className="w-full max-w-lg bg-white/95 backdrop-blur-md rounded-[2.5rem] p-10 shadow-2xl animate-slide-up relative z-10 border border-white/20">
-                {/* Improved Back Button */}
-                <button
-                    onClick={() => navigate("/")}
-                    className="absolute top-8 right-8 flex items-center gap-2 px-4 py-2 bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-primary-600 rounded-xl text-xs font-black transition-all border border-slate-100 hover:border-primary-100 group z-30 shadow-sm"
-                >
-                    <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
-                    BACK TO HOME
-                </button>
+                {/* Header row with Logo and Back Button */}
+                <div className="flex justify-between items-center mb-6">
+                    <img src="https://www.collegemobi.com/images/logo.png" alt="CollegeMobi Logo" className="h-10 sm:h-12 w-auto object-contain" />
+                    <button
+                        onClick={() => navigate("/")}
+                        className="flex items-center gap-2 px-3 py-2 bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-primary-600 rounded-xl text-xs font-black transition-all border border-slate-100 hover:border-primary-100 group z-30 shadow-sm shrink-0"
+                    >
+                        <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
+                        <span className="hidden sm:inline">BACK</span>
+                    </button>
+                </div>
 
-                <div className="flex items-center gap-4 mb-8">
-                    <img src="https://www.collegemobi.com/images/logo.png" alt="CollegeMobi Logo" className="h-14 w-auto object-contain" />
-                    <div>
-                        <p className="text-slate-500 font-bold text-xs uppercase tracking-widest mt-0.5">
-                            {isFaculty ? "Faculty Registration" : "Student Registration"}
-                        </p>
-                    </div>
+                <div className="mb-8">
+                    <h1 className="text-xl sm:text-2xl font-black text-slate-800 tracking-tight">
+                        {isFaculty ? "Faculty Registration" : "Student Registration"}
+                    </h1>
+                    <p className="text-slate-500 font-bold text-xs uppercase tracking-widest mt-1">
+                        Create your account
+                    </p>
                 </div>
 
                 {/* Toggle */}
@@ -76,6 +84,16 @@ export default function RegisterPage({ type = "student" }) {
                         <BookOpen size={16} />Faculty
                     </Link>
                 </div>
+
+                {!isFaculty && courseName && (
+                    <div className="mb-6 p-4 bg-primary-50 border border-primary-200 rounded-xl flex items-start gap-3">
+                        <CheckCircle2 className="text-primary-600 mt-0.5" size={20} />
+                        <div>
+                            <p className="text-sm font-bold text-slate-800">You are enrolling in:</p>
+                            <p className="text-primary-700 font-medium">{courseName}</p>
+                        </div>
+                    </div>
+                )}
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">

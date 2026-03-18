@@ -36,6 +36,7 @@ export const markAllAsRead = () => API.put("/notifications/read-all");
 
 // Courses
 export const getCourses = (params) => API.get("/courses", { params });
+export const getPublicCourses = (params) => axios.get(`${API_URL}/courses/public/all`, { params });
 export const getCourse = (id) => API.get(`/courses/${id}`);
 export const getMyCourses = () => API.get("/courses/my-courses");
 export const createCourse = (data) => API.post("/courses", data);

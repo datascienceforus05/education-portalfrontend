@@ -10,7 +10,7 @@
     scroll-behavior: auto !important;
   }
   body {
-    @apply font-sans bg-slate-50 text-slate-800 antialiased;
+    @apply font-sans bg-slate-50 text-slate-800 antialiased overflow-x-hidden;
   }
 }
 

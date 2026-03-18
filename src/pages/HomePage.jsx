@@ -1,6 +1,6 @@
-import { useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
-import { BookOpen, Users, Award, ArrowRight, PlayCircle, Globe, ShieldCheck } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { BookOpen, Users, Award, ArrowRight, Globe, ShieldCheck } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -11,6 +11,46 @@ export default function HomePage() {
     const heroRef = useRef(null);
     const titleRef = useRef(null);
     const containerRef = useRef(null);
+    const navigate = useNavigate();
+
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [selectedCat, setSelectedCat] = useState("All");
+    const dropdownRef = useRef(null);
+    const triggerRef = useRef(null);
+    const categories = ["All", "IT", "Medical", "Engineering", "Law", "Nursing", "Skill Development"];
+
+    useEffect(() => {
+        if (!dropdownRef.current) return;
+        if (dropdownOpen) {
+            gsap.fromTo(dropdownRef.current, 
+                { opacity: 0, y: -10, display: "none" }, 
+                { opacity: 1, y: 0, duration: 0.3, display: "block", ease: "power2.out" }
+            );
+        } else {
+            gsap.to(dropdownRef.current, { 
+                opacity: 0, 
+                y: -10, 
+                duration: 0.2, 
+                ease: "power2.in",
+                onComplete: () => {
+                    if (dropdownRef.current) dropdownRef.current.style.display = "none";
+                }
+            });
+        }
+    }, [dropdownOpen]);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+                dropdownRef.current && !dropdownRef.current.contains(event.target) &&
+                triggerRef.current && !triggerRef.current.contains(event.target)
+            ) {
+                setDropdownOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
 
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -125,10 +165,10 @@ export default function HomePage() {
             </motion.nav>
 
             {/* Hero Section */}
-            <section ref={heroRef} className="hero-trigger relative pt-32 lg:pt-48 pb-20 overflow-hidden bg-white">
+            <section ref={heroRef} className="hero-trigger relative pt-32 lg:pt-48 pb-20 bg-white">
                 <motion.div 
                     style={{ y: backgroundY }}
-                    className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full -z-10"
+                    className="absolute inset-0 overflow-hidden pointer-events-none -z-10"
                 >
                     <div className="absolute top-[5%] -right-[10%] w-[800px] h-[800px] bg-primary-50 rounded-full blur-[150px] opacity-60" />
                     <div className="absolute bottom-[5%] -left-[10%] w-[800px] h-[800px] bg-blue-50 rounded-full blur-[150px] opacity-60" />
@@ -161,25 +201,49 @@ export default function HomePage() {
                                 A premium educational ecosystem designed to bridge the gap between students and expert faculty through interactive learning experiences.
                             </motion.p>
 
-                            <motion.div 
+                            <motion.form 
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8, delay: 1 }}
-                                className="flex flex-col sm:flex-row items-center gap-5 justify-center lg:justify-start"
+                                onSubmit={(e) => {
+                                    e.preventDefault();
+                                    navigate(`/courses?category=${selectedCat}`);
+                                }}
+                                className="flex flex-col sm:flex-row items-center gap-3 justify-center lg:justify-start w-full max-w-lg mx-auto lg:mx-0 bg-white p-2 rounded-[2rem] shadow-2xl border border-slate-100 relative"
                             >
-                                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full sm:w-auto">
-                                    <Link to="/register" className="w-full sm:w-auto px-10 py-5 bg-primary-600 hover:bg-primary-700 text-white rounded-[2rem] font-black text-lg shadow-2xl shadow-primary-200 transition-all flex items-center justify-center gap-2 group font-space">
-                                        Get Started Now <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-                                    </Link>
-                                </motion.div>
-                                <motion.button 
-                                    whileHover={{ scale: 1.05 }} 
-                                    whileTap={{ scale: 0.95 }}
-                                    className="w-full sm:w-auto px-10 py-5 bg-white text-slate-700 rounded-[2rem] font-black text-lg shadow-lg border border-slate-100 transition-all hover:bg-slate-50 flex items-center justify-center gap-2 font-space"
+                                <div 
+                                    ref={triggerRef}
+                                    onClick={() => setDropdownOpen(!dropdownOpen)}
+                                    className="flex-1 w-full bg-transparent px-6 py-4 text-slate-600 font-bold outline-none border-none cursor-pointer flex justify-between items-center group font-sans"
                                 >
-                                    <PlayCircle size={22} className="text-primary-600" /> Watch Demo
-                                </motion.button>
-                            </motion.div>
+                                    <span className="text-slate-700 text-[15px]">{selectedCat === "All" ? "All Categories" : selectedCat}</span>
+                                    <svg className={`w-4 h-4 text-slate-400 transition-transform duration-300 ${dropdownOpen ? 'rotate-180 text-primary-600' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </div>
+                                
+                                <div 
+                                    ref={dropdownRef} 
+                                    data-lenis-prevent="true"
+                                    onWheel={(e) => e.stopPropagation()}
+                                    className="absolute top-full left-4 mt-3 w-[240px] max-h-[220px] overflow-y-auto overscroll-contain bg-white rounded-2xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.1)] border border-slate-100 z-[60] py-2 hidden custom-scrollbar"
+                                >
+                                    {categories.map(cat => (
+                                        <div 
+                                            key={cat}
+                                            onClick={() => {
+                                                setSelectedCat(cat);
+                                                setDropdownOpen(false);
+                                            }}
+                                            className={`px-5 py-3 cursor-pointer text-sm transition-all duration-200 ${selectedCat === cat ? 'bg-primary-600 text-white font-bold tracking-wide' : 'text-slate-600 font-medium hover:bg-slate-50 hover:text-primary-600 hover:pl-6'}`}
+                                        >
+                                            {cat === "All" ? "All Categories" : cat}
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <button type="submit" className="w-full sm:w-auto px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white rounded-[1.5rem] font-black text-sm shadow-xl shadow-primary-200 transition-all font-sans tracking-wide shrink-0 z-10 relative">
+                                    Search Courses
+                                </button>
+                            </motion.form>
 
                             <motion.div 
                                 initial={{ opacity: 0 }}
