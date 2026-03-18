@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../api";
 import { useAuth } from "../context/AuthContext";
 import toast from "react-hot-toast";
-import { Eye, EyeOff, GraduationCap, BookOpen, Users, Award, ArrowLeft } from "lucide-react";
+import { Eye, EyeOff, BookOpen, Users, Award, ArrowLeft } from "lucide-react";
 
 export default function LoginPage() {
     const [form, setForm] = useState({ email: "", password: "", role: "student" });
@@ -71,12 +71,7 @@ export default function LoginPage() {
                 {/* Left Panel (Visual) */}
                 <div className="hidden lg:flex flex-col justify-between w-1/2 p-12 text-white bg-primary-900/70 backdrop-blur-xl border-r border-white/10 relative">
                     <div className="flex items-center gap-3">
-                        <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-3 shadow-inner">
-                            <GraduationCap size={32} className="text-white" />
-                        </div>
-                        <div>
-                            <h1 className="text-2xl font-black tracking-tight text-white">Education Portal</h1>
-                        </div>
+                        <img src="https://www.collegemobi.com/images/logo.png" alt="CollegeMobi Logo" className="h-14 w-auto object-contain" />
                     </div>
 
                     <div className="space-y-10">
@@ -101,7 +96,7 @@ export default function LoginPage() {
                     </div>
 
                     <p className="text-slate-400 text-sm font-medium">
-                        © 2026 Education Portal. All rights reserved.
+                        © 2026 CollegeMobi Edu. All rights reserved.
                     </p>
                 </div>
 
@@ -109,8 +104,7 @@ export default function LoginPage() {
                 <div className="flex-1 flex items-center justify-center p-6 bg-white lg:rounded-l-3xl relative">
                     <div className="w-full max-w-md animate-slide-up">
                         <div className="lg:hidden flex items-center gap-2 mb-8">
-                            <GraduationCap size={28} className="text-primary-600" />
-                            <span className="text-xl font-bold text-primary-900">Education Portal</span>
+                            <img src="https://www.collegemobi.com/images/logo.png" alt="CollegeMobi Logo" className="h-10 w-auto object-contain" />
                         </div>
                         <h2 className="text-3xl font-bold text-slate-800 mb-2">Welcome back</h2>
                         <p className="text-slate-500 mb-8">Sign in to continue your learning journey</p>

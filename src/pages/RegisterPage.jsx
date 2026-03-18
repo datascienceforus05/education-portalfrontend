@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Link, useNavigate } from "react-router-dom";
 import { registerStudent, registerFaculty } from "../api";
 import toast from "react-hot-toast";
-import { GraduationCap, Eye, EyeOff, User, BookOpen, ArrowLeft } from "lucide-react";
+import { Eye, EyeOff, User, BookOpen, ArrowLeft } from "lucide-react";
 
 export default function RegisterPage({ type = "student" }) {
     const [form, setForm] = useState({
@@ -59,11 +59,8 @@ export default function RegisterPage({ type = "student" }) {
                 </button>
 
                 <div className="flex items-center gap-4 mb-8">
-                    <div className="bg-primary-600 rounded-2xl p-3 shadow-lg shadow-primary-200">
-                        <GraduationCap size={32} className="text-white" />
-                    </div>
+                    <img src="https://www.collegemobi.com/images/logo.png" alt="CollegeMobi Logo" className="h-14 w-auto object-contain" />
                     <div>
-                        <h1 className="text-2xl font-black text-slate-800 tracking-tight">Education Portal</h1>
                         <p className="text-slate-500 font-bold text-xs uppercase tracking-widest mt-0.5">
                             {isFaculty ? "Faculty Registration" : "Student Registration"}
                         </p>

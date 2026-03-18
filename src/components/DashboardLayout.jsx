@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import toast from "react-hot-toast";
 import PropTypes from "prop-types";
 import {
-    GraduationCap, LayoutDashboard, BookOpen, FileText, Video,
+    LayoutDashboard, BookOpen, FileText, Video,
     ClipboardList, BarChart2, Users, LogOut, ChevronLeft,
     ChevronRight, Bell, Menu, Award, Calendar, ArrowLeft,
     MessageSquare
@@ -58,16 +58,8 @@ export default function DashboardLayout({ children }) {
 
     const SidebarContent = () => (
         <div className="flex flex-col h-full">
-            {/* Logo */}
             <div className={`flex items-center gap-3 p-5 border-b border-primary-700/50 ${collapsed ? "justify-center" : ""}`}>
-                <div className="bg-white/20 rounded-xl p-2 flex-shrink-0">
-                    <GraduationCap size={22} className="text-white" />
-                </div>
-                {!collapsed && (
-                    <div className="animate-fade-in">
-                        <div className="text-white font-black text-xl leading-none tracking-tighter">COLLEGEMOBI<span className="text-primary-300">EDU</span></div>
-                    </div>
-                )}
+                <img src="https://www.collegemobi.com/images/logo.png" alt="CollegeMobi Logo" className={`${collapsed ? "h-6 w-auto" : "h-10 w-auto"} object-contain transition-all`} />
             </div>
 
             {/* User Info */}

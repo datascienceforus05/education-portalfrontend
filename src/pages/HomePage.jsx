@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { GraduationCap, BookOpen, Users, Award, ArrowRight, PlayCircle, Globe, ShieldCheck } from "lucide-react";
+import { BookOpen, Users, Award, ArrowRight, PlayCircle, Globe, ShieldCheck } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -95,10 +95,7 @@ export default function HomePage() {
                             className="flex items-center gap-3 group cursor-pointer" 
                             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                         >
-                            <div className="w-11 h-11 bg-gradient-to-tr from-primary-600 to-blue-500 rounded-2xl flex items-center justify-center shadow-xl shadow-primary-200 group-hover:rotate-6 transition-transform">
-                                <GraduationCap className="text-white" size={26} />
-                            </div>
-                            <span className="text-2xl font-black text-slate-900 tracking-tighter font-heading">COLLEGEMOBI<span className="text-primary-600">EDU</span></span>
+                            <img src="https://www.collegemobi.com/images/logo.png" alt="CollegeMobi Logo" className="h-12 w-auto object-contain transition-transform group-hover:scale-105" />
                         </motion.div>
 
                         <div className="hidden md:flex items-center gap-10">
@@ -347,7 +344,7 @@ export default function HomePage() {
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-16 lg:gap-8">
                         {[
                             { value: "12,480", label: "Active Students", icon: Users },
-                            { value: "580+", label: "Expert Faculty", icon: GraduationCap },
+                            { value: "580+", label: "Expert Faculty", icon: BookOpen },
                             { value: "95.4%", label: "Average Growth", icon: Award },
                             { value: "24/7", label: "Global Support", icon: Globe },
                         ].map((stat, i) => (
@@ -494,10 +491,7 @@ export default function HomePage() {
                     <div className="grid md:grid-cols-4 gap-20 mb-20">
                         <div className="col-span-2 space-y-10">
                             <div className="flex items-center gap-4">
-                                <div className="w-14 h-14 bg-primary-600 rounded-[1.5rem] flex items-center justify-center shadow-2xl ring-4 ring-primary-100">
-                                    <GraduationCap className="text-white" size={32} />
-                                </div>
-                                <span className="text-3xl font-black text-slate-900 tracking-tighter font-heading">COLLEGEMOBI EDU</span>
+                                <img src="https://www.collegemobi.com/images/logo.png" alt="CollegeMobi Logo" className="h-16 w-auto object-contain" />
                             </div>
                             <p className="text-slate-500 max-w-md font-medium text-xl leading-relaxed">
                                 Redefining digital pedagogy through intelligent design and seamless user experience.

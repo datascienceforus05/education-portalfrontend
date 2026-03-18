@@ -21,7 +21,7 @@ export default function AdminDashboard() {
         setSeeding(true);
         try {
             await seedAdmin();
-            toast.success("Admin user created: admin@shalom.edu / Admin@123");
+            toast.success("Admin user created: admin@collegemobi.com / Admin@123");
         } catch (err) {
             toast.error(err.response?.data?.message || "Failed");
         } finally {
@@ -50,10 +50,10 @@ export default function AdminDashboard() {
     return (
         <div className="space-y-6 animate-slide-up">
             <div className="flex items-center justify-between flex-wrap gap-3">
-                <div>
-                    <h1 className="page-title">Admin Dashboard</h1>
-                    <p className="text-slate-500 text-sm mt-1">Manage the entire education portal</p>
-                </div>
+                        <div>
+                            <h2 className="text-2xl font-black text-slate-800 tracking-tight">CollegeMobi Edu</h2>
+                            <p className="text-slate-500 text-sm mt-1">Manage the entire online campus</p>
+                        </div>
                 <button onClick={handleSeed} disabled={seeding} className="btn-secondary text-sm flex items-center gap-2">
                     <Shield size={16} />{seeding ? "Creating..." : "Seed Admin User"}
                 </button>
