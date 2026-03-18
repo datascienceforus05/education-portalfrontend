@@ -189,7 +189,7 @@ export default function LoginPage() {
                                 <div className="space-y-3">
                                     <div className="flex justify-between items-center text-xs">
                                         <span className="font-bold text-slate-600">Admin:</span>
-                                        <code className="bg-white px-2 py-1 rounded border border-slate-200 text-primary-600">admin@onorg.com</code>
+                                        <code className="bg-white px-2 py-1 rounded border border-slate-200 text-primary-600">admin@collegemobi.com</code>
                                     </div>
                                     <div className="flex justify-between items-center text-xs">
                                         <span className="font-bold text-slate-600">Faculty:</span>
