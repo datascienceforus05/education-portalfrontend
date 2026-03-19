@@ -158,12 +158,12 @@ export default function HomePage() {
                         </motion.div>
 
                         <div className="hidden md:flex items-center gap-10">
-                            {['Features', 'Stats', 'About', 'Faculty', 'Board'].map((item) => (
+                            {['Features', 'Stats', 'About', 'Faculty', 'Board Members'].map((item) => (
                                 <button
                                     key={item}
                                     onClick={() => {
                                         if (item === 'Faculty') navigate('/faculty-list');
-                                        else if (item === 'Board') navigate('/board-list');
+                                        else if (item === 'Board Members') navigate('/board-list');
                                         else scrollToSection(item.toLowerCase());
                                     }}
                                     className="text-sm font-bold text-slate-600 hover:text-primary-600 transition-colors uppercase tracking-widest font-space"
@@ -188,14 +188,14 @@ export default function HomePage() {
             </motion.nav>
 
             {/* Hero Banner Section */}
-            <section ref={heroRef} className="hero-trigger relative min-h-[500px] sm:min-h-[600px] flex items-center justify-center bg-slate-900 pt-20">
+            <section ref={heroRef} className="hero-trigger relative min-h-[500px] sm:min-h-[600px] flex items-center justify-center bg-slate-50 pt-20">
                 {/* Clean Premium Background */}
-                <div className="absolute inset-0 z-0 bg-slate-950 overflow-hidden">
-                    <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[70%] bg-primary-600/20 rounded-full blur-[120px]" />
-                    <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[80%] bg-blue-600/20 rounded-full blur-[120px]" />
+                <div className="absolute inset-0 z-0 bg-white overflow-hidden">
+                    <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[70%] bg-primary-200/50 rounded-full blur-[120px]" />
+                    <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[80%] bg-blue-200/50 rounded-full blur-[120px]" />
                     {/* Subtle Grid */}
-                    <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:32px_32px]"></div>
-                    <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-white to-transparent z-10" />
+                    <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000008_1px,transparent_1px),linear-gradient(to_bottom,#00000008_1px,transparent_1px)] bg-[size:32px_32px]"></div>
+                    <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-slate-50 to-transparent z-10" />
                 </div>
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-30 pt-44 pb-32">
@@ -204,20 +204,20 @@ export default function HomePage() {
                             initial={{ opacity: 0, y: -20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8 }}
-                            className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white mb-8"
+                            className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-white shadow-sm border border-slate-100 text-slate-600 mb-8"
                         >
-                            <div className="w-2 h-2 bg-primary-400 rounded-full animate-ping" />
-                            <span className="text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] font-space">Your Future Starts Here</span>
+                            <div className="w-2 h-2 bg-primary-500 rounded-full animate-ping" />
+                            <span className="text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] font-space text-slate-500">Your Future Starts Here</span>
                         </motion.div>
 
                         <motion.h1 
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 0.2 }}
-                            className="text-3xl sm:text-5xl lg:text-[4.5rem] font-black text-white leading-[1.1] tracking-tight mb-8 font-heading drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
+                            className="text-3xl sm:text-5xl lg:text-[4.5rem] font-black text-slate-900 leading-[1.1] tracking-tight mb-8 font-heading"
                         >
                             Explore Professional <br />
-                            <span className="text-primary-400">Programs & Courses</span>
+                            <span className="text-primary-600">Programs & Courses</span>
                         </motion.h1>
 
                         <motion.form 
@@ -228,15 +228,15 @@ export default function HomePage() {
                                 e.preventDefault();
                                 navigate(`/courses?category=${selectedCat}`);
                             }}
-                            className="flex flex-col sm:flex-row items-center gap-3 w-full max-w-2xl bg-white/10 backdrop-blur-md p-3 rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] border border-white/20 relative z-50"
+                            className="flex flex-col sm:flex-row items-center gap-3 w-full max-w-2xl bg-white p-3 rounded-[2.5rem] shadow-xl shadow-slate-200/50 border border-slate-100 relative z-50"
                         >
                             <div 
                                 ref={triggerRef}
                                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                                className="flex-1 w-full bg-transparent px-8 py-5 text-white/90 font-bold outline-none border-none cursor-pointer flex justify-between items-center group font-sans"
+                                className="flex-1 w-full bg-transparent px-8 py-5 text-slate-800 font-bold outline-none border-none cursor-pointer flex justify-between items-center group font-sans"
                             >
-                                <span className="text-white text-[16px]">{selectedCat === "All" ? "All Categories" : selectedCat}</span>
-                                <svg className={`w-5 h-5 text-white/50 transition-transform duration-300 ${dropdownOpen ? 'rotate-180 text-primary-400' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                                <span className="text-slate-800 text-[16px]">{selectedCat === "All" ? "All Categories" : selectedCat}</span>
+                                <svg className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${dropdownOpen ? 'rotate-180 text-primary-500' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
                             </div>
                             
                             <div 
