@@ -42,6 +42,7 @@ export const getCourse = (id) => API.get(`/courses/${id}`);
 export const getMyCourses = () => API.get("/courses/my-courses");
 export const createCourse = (data) => API.post("/courses", data);
 export const updateCourse = (id, data) => API.put(`/courses/${id}`, data);
+export const deleteCourse = (id) => API.delete(`/courses/${id}`);
 export const enrollCourse = (id) => API.post(`/courses/${id}/enroll`);
 
 // Materials
@@ -74,6 +75,8 @@ export const getResult = (id) => API.get(`/results/${id}`);
 // Admin
 export const getAdminStats = () => API.get("/admin/stats");
 export const getAdminUsers = (params) => API.get("/admin/users", { params });
+export const createUser = (data) => API.post("/admin/users", data);
+export const updateUser = (id, data) => API.put(`/admin/users/${id}`, data);
 export const approveUser = (id, data) => API.put(`/admin/users/${id}/approve`, data);
 export const toggleUserStatus = (id) => API.put(`/admin/users/${id}/toggle-status`);
 export const deleteUser = (id) => API.delete(`/admin/users/${id}`);
@@ -88,6 +91,7 @@ export const startConversation = (receiverId) => API.post("/chat/conversations",
 export const getMessages = (conversationId) => API.get(`/chat/messages/${conversationId}`);
 export const sendMessage = (data) => API.post("/chat/messages", data, { headers: { "Content-Type": "multipart/form-data" } });
 export const getFaculty = () => axios.get(`${API_URL}/auth/faculty`);
+export const getBoardMembers = () => axios.get(`${API_URL}/auth/board`);
 
 
 export default API;

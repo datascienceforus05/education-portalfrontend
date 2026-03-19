@@ -37,6 +37,7 @@ const adminNav = [
     { label: "Courses", icon: BookOpen, to: "/admin/courses" },
     { label: "Materials", icon: FileText, to: "/admin/materials" },
     { label: "Schedules", icon: Calendar, to: "/admin/schedules" },
+    { label: "Leaderboard", icon: BarChart2, to: "/admin/leaderboard" },
     { label: "Messages", icon: MessageSquare, to: "/admin/messages" },
 ];
 

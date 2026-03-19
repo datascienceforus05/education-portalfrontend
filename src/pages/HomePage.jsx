@@ -158,10 +158,14 @@ export default function HomePage() {
                         </motion.div>
 
                         <div className="hidden md:flex items-center gap-10">
-                            {['Features', 'Stats', 'About', 'Faculty'].map((item) => (
+                            {['Features', 'Stats', 'About', 'Faculty', 'Board'].map((item) => (
                                 <button
                                     key={item}
-                                    onClick={() => item === 'Faculty' ? navigate('/faculty-list') : scrollToSection(item.toLowerCase())}
+                                    onClick={() => {
+                                        if (item === 'Faculty') navigate('/faculty-list');
+                                        else if (item === 'Board') navigate('/board-list');
+                                        else scrollToSection(item.toLowerCase());
+                                    }}
                                     className="text-sm font-bold text-slate-600 hover:text-primary-600 transition-colors uppercase tracking-widest font-space"
                                 >
                                     {item}

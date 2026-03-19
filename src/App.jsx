@@ -12,6 +12,7 @@ import RegisterPage from "./pages/RegisterPage";
 import CoursesPage from "./pages/CoursesPage";
 import CourseDetails from "./pages/CourseDetails";
 import OurFaculty from "./pages/OurFaculty";
+import OurBoard from "./pages/OurBoard";
 
 // Student Pages
 import StudentDashboard from "./pages/student/StudentDashboard";
@@ -91,6 +92,7 @@ function AppRoutes() {
       <Route path="/courses" element={<CoursesPage />} />
       <Route path="/course/:id" element={<CourseDetails />} />
       <Route path="/faculty-list" element={<OurFaculty />} />
+      <Route path="/board-list" element={<OurBoard />} />
 
       {/* Student Routes */}
       <Route path="/student" element={<ProtectedRoute allowedRoles={["student"]}><WithLayout><StudentDashboard /></WithLayout></ProtectedRoute>} />
