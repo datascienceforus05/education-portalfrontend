@@ -189,13 +189,12 @@ export default function HomePage() {
 
             {/* Hero Banner Section */}
             <section ref={heroRef} className="hero-trigger relative min-h-[500px] sm:min-h-[600px] flex items-center justify-center bg-slate-900 pt-20">
-                {/* Background Image Layer with Blur */}
-                <div className="absolute inset-0 z-0">
-                    <img 
-                        src="/image.png" 
-                        alt="Hero Banner" 
-                        className="w-full h-full object-cover opacity-80" 
-                    />
+                {/* Clean Premium Background */}
+                <div className="absolute inset-0 z-0 bg-slate-950 overflow-hidden">
+                    <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[70%] bg-primary-600/20 rounded-full blur-[120px]" />
+                    <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[80%] bg-blue-600/20 rounded-full blur-[120px]" />
+                    {/* Subtle Grid */}
+                    <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:32px_32px]"></div>
                     <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-white to-transparent z-10" />
                 </div>
 
