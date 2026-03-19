@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { BookOpen, Users, Award, ArrowRight, Globe, ShieldCheck } from "lucide-react";
+import { BookOpen, Users, Award, ArrowRight, Globe } from "lucide-react";
 import { motion } from "framer-motion";
+import { getPublicCourses } from "../api";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -15,9 +16,25 @@ export default function HomePage() {
 
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [selectedCat, setSelectedCat] = useState("All");
+    const [publicCourses, setPublicCourses] = useState([]);
+    const [loadingCourses, setLoadingCourses] = useState(true);
     const dropdownRef = useRef(null);
     const triggerRef = useRef(null);
     const categories = ["All", "IT", "Medical", "Engineering", "Law", "Nursing", "Skill Development"];
+
+    useEffect(() => {
+        const fetchPublicCourses = async () => {
+            try {
+                const res = await getPublicCourses();
+                setPublicCourses(res.data.slice(0, 8)); // Show top 8
+            } catch (err) {
+                console.error("Error fetching courses:", err);
+            } finally {
+                setLoadingCourses(false);
+            }
+        };
+        fetchPublicCourses();
+    }, []);
 
     useEffect(() => {
         if (!dropdownRef.current) return;
@@ -160,15 +177,15 @@ export default function HomePage() {
             </motion.nav>
 
             {/* Hero Banner Section */}
-            <section ref={heroRef} className="hero-trigger relative min-h-[85vh] flex items-center justify-center overflow-hidden bg-white">
+            <section ref={heroRef} className="hero-trigger relative min-h-[500px] sm:min-h-[600px] flex items-center justify-center overflow-hidden bg-slate-900 pt-20">
                 {/* Background Image Layer with Blur */}
                 <div className="absolute inset-0 z-0">
                     <img 
                         src="/image.png" 
                         alt="Hero Banner" 
-                        className="w-full h-full object-cover scale-105" 
+                        className="w-full h-full object-cover opacity-80" 
                     />
-                    <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-[6px]" />
+                    <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-[8px]" />
                 </div>
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
@@ -187,7 +204,7 @@ export default function HomePage() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 0.2 }}
-                            className="text-4xl sm:text-6xl lg:text-[5rem] font-black text-white leading-[1.1] tracking-tight mb-8 font-heading drop-shadow-2xl"
+                            className="text-3xl sm:text-5xl lg:text-[4.5rem] font-black text-white leading-[1.1] tracking-tight mb-8 font-heading drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
                         >
                             Explore Professional <br />
                             <span className="text-primary-400">Programs & Courses</span>
@@ -201,15 +218,15 @@ export default function HomePage() {
                                 e.preventDefault();
                                 navigate(`/courses?category=${selectedCat}`);
                             }}
-                            className="flex flex-col sm:flex-row items-center gap-3 w-full max-w-2xl bg-white/95 backdrop-blur-xl p-3 rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] border border-white/20 relative"
+                            className="flex flex-col sm:flex-row items-center gap-3 w-full max-w-2xl bg-white/10 backdrop-blur-md p-3 rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] border border-white/20 relative"
                         >
                             <div 
                                 ref={triggerRef}
                                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                                className="flex-1 w-full bg-transparent px-8 py-5 text-slate-600 font-bold outline-none border-none cursor-pointer flex justify-between items-center group font-sans"
+                                className="flex-1 w-full bg-transparent px-8 py-5 text-white/90 font-bold outline-none border-none cursor-pointer flex justify-between items-center group font-sans"
                             >
-                                <span className="text-slate-700 text-[16px]">{selectedCat === "All" ? "All Categories" : selectedCat}</span>
-                                <svg className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${dropdownOpen ? 'rotate-180 text-primary-600' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                                <span className="text-white text-[16px]">{selectedCat === "All" ? "All Categories" : selectedCat}</span>
+                                <svg className={`w-5 h-5 text-white/50 transition-transform duration-300 ${dropdownOpen ? 'rotate-180 text-primary-400' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
                             </div>
                             
                             <div 
@@ -274,11 +291,11 @@ export default function HomePage() {
                         >
                             The Future of Education
                         </motion.div>
-                        <h2 className="text-5xl lg:text-6xl font-black text-slate-900 mb-8 font-heading">Powerful Tools for Growth</h2>
+                        <h2 className="text-5xl lg:text-5xl font-black text-slate-900 mb-8 font-heading">Powerful Tools for Growth</h2>
                         <p className="text-xl text-slate-500 font-medium leading-relaxed">Experience a seamless integration of learning and management in one ultra-responsive dashboard.</p>
                     </div>
 
-                    <div className="grid md:grid-cols-3 gap-12">
+                    <div className="grid md:grid-cols-3 gap-12 mb-32">
                         {[
                             {
                                 title: "Smart Course Library",
@@ -293,7 +310,7 @@ export default function HomePage() {
                                 desc: "Timed testing environment with automatic grading and comprehensive performance analytics.",
                                 img: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=2070&auto=format&fit=crop",
                                 icon: Award,
-                                color: "from-amber-500 to-orange-400",
+                                color: "from-purple-600 to-pink-500",
                                 tags: ["Real-time", "Secure", "Instant"]
                             },
                             {
@@ -334,15 +351,50 @@ export default function HomePage() {
                                         ))}
                                     </div>
                                 </div>
-                                <div className="p-12 flex-1 flex flex-col">
-                                    <h3 className="text-3xl font-black text-slate-900 mb-6 group-hover:text-primary-600 transition-colors font-heading">{feature.title}</h3>
-                                    <p className="text-slate-500 leading-relaxed font-medium mb-10 flex-1 text-lg">{feature.desc}</p>
-                                    <button className="flex items-center gap-3 text-sm font-black text-primary-600 group-hover:gap-5 transition-all uppercase tracking-[0.2em] font-space">
+                                <div className="p-10 flex-1 flex flex-col">
+                                    <h3 className="text-2xl font-black text-slate-900 mb-4 group-hover:text-primary-600 transition-colors font-heading">{feature.title}</h3>
+                                    <p className="text-slate-500 leading-relaxed font-medium mb-8 flex-1 text-base">{feature.desc}</p>
+                                    <button className="flex items-center gap-3 text-xs font-black text-primary-600 group-hover:gap-5 transition-all uppercase tracking-[0.2em] font-space text-left">
                                         Explore System <ArrowRight size={18} />
                                     </button>
                                 </div>
                             </motion.div>
                         ))}
+                    </div>
+
+                    {/* Course Tiles Grid */}
+                    <div className="max-w-4xl mx-auto text-center mb-16">
+                        <h2 className="text-4xl font-black text-slate-900 mb-4 font-heading">Popular Programs</h2>
+                        <p className="text-lg text-slate-500 font-medium">Find your path by exploring our most in-demand course offerings.</p>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                        {!loadingCourses ? publicCourses.map((course, i) => (
+                            <motion.div 
+                                key={course._id}
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
+                                transition={{ delay: i * 0.05 }}
+                                whileHover={{ y: -10 }}
+                                className="bg-slate-50 p-8 rounded-[2.5rem] border border-slate-100 text-center flex flex-col group cursor-pointer"
+                                onClick={() => navigate(`/register?courseId=${course._id}&courseName=${course.title}`)}
+                            >
+                                <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm group-hover:bg-primary-600 group-hover:text-white transition-all">
+                                    <BookOpen size={24} />
+                                </div>
+                                <h4 className="font-black text-slate-900 text-lg mb-3 line-clamp-2 min-h-[3.5rem] font-heading">{course.title}</h4>
+                                <p className="text-xs font-black text-primary-600 uppercase tracking-widest font-space mb-6">{course.category}</p>
+                                <div className="mt-auto">
+                                    <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover:text-primary-600 transition-colors">
+                                        View Details <ArrowRight size={14} />
+                                    </span>
+                                </div>
+                            </motion.div>
+                        )) : (
+                            Array(4).fill(0).map((_, i) => (
+                                <div key={i} className="bg-slate-50 h-[300px] rounded-[2.5rem] animate-pulse" />
+                            ))
+                        )}
                     </div>
                 </div>
             </section>
@@ -392,35 +444,25 @@ export default function HomePage() {
                                 whileInView={{ opacity: 1, x: 0 }}
                                 className="text-primary-600 font-black uppercase tracking-[0.4em] text-xs font-space"
                             >
-                                Our Commitment
+                                About CollegeMobi
                             </motion.div>
-                            <h2 className="text-5xl lg:text-6xl font-black text-slate-900 leading-[1.1] font-heading">Empowering Minds <br /> Globally</h2>
-                            <p className="text-2xl text-slate-500 leading-relaxed font-medium">
-                                We&apos;ve engineered a platform where curiosity meets technology. A space where knowledge isn&apos;t just delivered, but experienced.
-                            </p>
-                            <div className="grid sm:grid-cols-2 gap-8">
-                                {[
-                                    { title: "Academic Rigor", text: "Verified curriculum standards" },
-                                    { title: "Student Privacy", text: "Enterprise-grade security" },
-                                    { title: "Modern Stack", text: "Built with React & GSAP" },
-                                    { title: "Global Reach", text: "Localized learning paths" },
-                                ].map((item, i) => (
-                                    <motion.div 
-                                        key={i} 
-                                        whileHover={{ x: 10 }}
-                                        className="flex gap-5 p-6 bg-white rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all"
-                                    >
-                                        <div className="mt-1">
-                                            <div className="p-3 bg-primary-50 rounded-2xl">
-                                                <ShieldCheck size={24} className="text-primary-600" />
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <h4 className="font-black text-slate-900 text-lg font-heading">{item.title}</h4>
-                                            <p className="text-slate-500 text-sm font-medium font-space">{item.text}</p>
-                                        </div>
-                                    </motion.div>
-                                ))}
+                            <h2 className="text-5xl lg:text-7xl font-black text-slate-900 leading-[1] font-heading">Quality Beyond <br /> Measures</h2>
+                            
+                            <div className="space-y-8 text-xl text-slate-600 leading-relaxed font-medium">
+                                <p>
+                                    CollegeMobi Online Education provides quality education to enhance the standard of living of the student and achieve their goals. CollegeMobi contribute their service to all the students providing better education with experienced faculty.
+                                </p>
+                                <p className="bg-white p-8 rounded-[2rem] border-l-8 border-primary-600 shadow-sm italic text-slate-900">
+                                    &ldquo;The guiding mission of CollegeMobi is deliver the absolute best experience and results for the students. We are not the company ourselves, but we fill a role that can be even more valuable in your life as the all-in-one resource to educate, connect, and facilitate your education.&rdquo;
+                                </p>
+                                <p>
+                                    We believe that clear and efficient planning is critical to the well-being of an student and school. Our unique ability to take this philosophy and turn it into a superior set of services for our students is a result of our deep understanding of our student needs and concerns.
+                                </p>
+                            </div>
+
+                            <div className="flex flex-wrap gap-4">
+                                <Link to="/register" className="px-10 py-5 bg-slate-900 text-white rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-primary-600 transition-all shadow-xl">Start Your Journey</Link>
+                                <button className="px-10 py-5 bg-white text-slate-900 border border-slate-200 rounded-2xl font-black text-sm uppercase tracking-widest hover:border-primary-600 transition-all">Learn More</button>
                             </div>
                         </div>
 
@@ -429,9 +471,10 @@ export default function HomePage() {
                                 <div className="space-y-8 pt-16">
                                     <motion.div 
                                         whileHover={{ scale: 0.95, rotate: -2 }}
-                                        className="rounded-[3rem] overflow-hidden shadow-2xl h-[400px]"
+                                        className="bg-white p-8 rounded-[2.5rem] shadow-2xl flex flex-col justify-center border border-slate-100"
                                     >
-                                        <img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?q=80&w=2070&auto=format&fit=crop" alt="Edu" className="w-full h-full object-cover" />
+                                        <p className="text-slate-500 font-bold mb-4">We believe that clear and efficient planning is critical to the well-being of an student and school.</p>
+                                        <div className="w-12 h-1 bg-primary-600" />
                                     </motion.div>
                                     <motion.div 
                                         whileHover={{ scale: 0.95, rotate: 2 }}
@@ -445,17 +488,32 @@ export default function HomePage() {
                                         whileHover={{ scale: 0.95, rotate: 2 }}
                                         className="rounded-[3rem] overflow-hidden shadow-2xl h-[300px]"
                                     >
-                                        <img src="https://images.unsplash.com/photo-1571260899304-425ffa237937?q=80&w=2070&auto=format&fit=crop" alt="Edu" className="w-full h-full object-cover" />
+                                        <img src="https://images.unsplash.com/photo-1501504905252-473c47e087f8?q=80&w=2074&auto=format&fit=crop" alt="Edu" className="w-full h-full object-cover" />
                                     </motion.div>
                                     <motion.div 
                                         whileHover={{ scale: 0.95, rotate: -2 }}
-                                        className="rounded-[3rem] overflow-hidden shadow-2xl h-[400px]"
+                                        className="bg-slate-900 p-8 rounded-[2.5rem] shadow-2xl flex flex-col justify-center text-white"
                                     >
-                                        <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=2070&auto=format&fit=crop" alt="Edu" className="w-full h-full object-cover" />
+                                        <p className="font-bold mb-4 opacity-80">CollegeMobi is following the best and updated curriculum of all the subjects.</p>
+                                        <div className="w-12 h-1 bg-primary-400" />
                                     </motion.div>
                                 </div>
                             </div>
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[140%] bg-white rounded-full -z-10 blur-[100px] opacity-60" />
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[140%] bg-primary-600 rounded-full -z-10 blur-[150px] opacity-10" />
+                        </div>
+                    </div>
+
+                    <div className="mt-40 bg-white rounded-[4rem] p-12 lg:p-24 shadow-2xl border border-slate-50">
+                        <div className="max-w-4xl mx-auto space-y-10">
+                            <h3 className="text-4xl font-black text-slate-900 font-heading">Our Philosophy</h3>
+                            <div className="grid md:grid-cols-2 gap-16 text-lg text-slate-500 font-medium leading-relaxed">
+                                <p>
+                                    We believe that clear and efficient planning is critical to the well-being of an student and school. Our unique ability to take this philosophy and turn it into a superior set of services for our students is a result of our deep understanding of our student needs and concerns, our unique organizational structure, technological capabilities, and our passion for the task at hand.
+                                </p>
+                                <p>
+                                    We believed that the student and conflicts of interest were not acceptable. We knew you wanted better. We wanted better for all of us. We put a lot of minds, technology, and late nights together to deliver this solution. It’s for you. It’s your site; clear, efficient, and organized.
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
