@@ -86,7 +86,7 @@ export const getConversations = () => API.get("/chat/conversations");
 export const startConversation = (receiverId) => API.post("/chat/conversations", { receiverId });
 export const getMessages = (conversationId) => API.get(`/chat/messages/${conversationId}`);
 export const sendMessage = (data) => API.post("/chat/messages", data, { headers: { "Content-Type": "multipart/form-data" } });
-export const getFaculty = () => API.get("/faculty");
+export const getFaculty = () => axios.get(`${API_URL}/auth/faculty`);
 
 
 export default API;

@@ -10,6 +10,8 @@ import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import CoursesPage from "./pages/CoursesPage";
+import CourseDetails from "./pages/CourseDetails";
+import OurFaculty from "./pages/OurFaculty";
 
 // Student Pages
 import StudentDashboard from "./pages/student/StudentDashboard";
@@ -87,6 +89,8 @@ function AppRoutes() {
       <Route path="/register" element={<RegisterPage type="student" />} />
       <Route path="/register/faculty" element={<RegisterPage type="faculty" />} />
       <Route path="/courses" element={<CoursesPage />} />
+      <Route path="/course/:id" element={<CourseDetails />} />
+      <Route path="/faculty-list" element={<OurFaculty />} />
 
       {/* Student Routes */}
       <Route path="/student" element={<ProtectedRoute allowedRoles={["student"]}><WithLayout><StudentDashboard /></WithLayout></ProtectedRoute>} />

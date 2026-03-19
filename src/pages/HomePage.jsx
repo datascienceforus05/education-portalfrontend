@@ -20,13 +20,20 @@ export default function HomePage() {
     const [loadingCourses, setLoadingCourses] = useState(true);
     const dropdownRef = useRef(null);
     const triggerRef = useRef(null);
-    const categories = ["All", "IT", "Medical", "Engineering", "Law", "Nursing", "Skill Development"];
+    const categories = ["All", "Engineering", "Medical", "Law", "Technology", "Fine Arts", "Social Science"];
+
+    const fallbackCourses = [
+        { _id: "f1", title: "Advanced Aerospace Engineering", category: "Engineering" },
+        { _id: "f2", title: "MBBS Specialisations", category: "Medical" },
+        { _id: "f3", title: "Corporate Law", category: "Law" },
+        { _id: "f4", title: "Full Stack Development", category: "Technology" }
+    ];
 
     useEffect(() => {
         const fetchPublicCourses = async () => {
             try {
                 const res = await getPublicCourses();
-                setPublicCourses(res.data.slice(0, 8)); // Show top 8
+                setPublicCourses(res.data.courses?.slice(0, 8) || []); // Corrected mapping to .courses
             } catch (err) {
                 console.error("Error fetching courses:", err);
             } finally {
@@ -151,10 +158,10 @@ export default function HomePage() {
                         </motion.div>
 
                         <div className="hidden md:flex items-center gap-10">
-                            {['Features', 'Stats', 'About'].map((item) => (
+                            {['Features', 'Stats', 'About', 'Faculty'].map((item) => (
                                 <button
                                     key={item}
-                                    onClick={() => scrollToSection(item.toLowerCase())}
+                                    onClick={() => item === 'Faculty' ? navigate('/faculty-list') : scrollToSection(item.toLowerCase())}
                                     className="text-sm font-bold text-slate-600 hover:text-primary-600 transition-colors uppercase tracking-widest font-space"
                                 >
                                     {item}
@@ -168,7 +175,7 @@ export default function HomePage() {
                             </Link>
                             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                                 <Link to="/register" className="px-7 py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-2xl text-sm font-black shadow-2xl shadow-slate-200 transition-all font-space">
-                                    Join Free
+                                    Join Now
                                 </Link>
                             </motion.div>
                         </div>
@@ -255,27 +262,7 @@ export default function HomePage() {
                             </button>
                         </motion.form>
 
-                        <motion.div 
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.8 }}
-                            className="mt-12 flex items-center gap-8 text-white/80"
-                        >
-                            <div className="flex flex-col items-center">
-                                <span className="text-2xl font-black text-white">12k+</span>
-                                <span className="text-[10px] uppercase tracking-widest font-bold opacity-60">Students</span>
-                            </div>
-                            <div className="w-px h-10 bg-white/20" />
-                            <div className="flex flex-col items-center">
-                                <span className="text-2xl font-black text-white">500+</span>
-                                <span className="text-[10px] uppercase tracking-widest font-bold opacity-60">Courses</span>
-                            </div>
-                            <div className="w-px h-10 bg-white/20" />
-                            <div className="flex flex-col items-center">
-                                <span className="text-2xl font-black text-white">4.9/5</span>
-                                <span className="text-[10px] uppercase tracking-widest font-bold opacity-60">Rating</span>
-                            </div>
-                        </motion.div>
+                        {/* Stats counters removed */}
                     </div>
                 </div>
             </section>
@@ -368,25 +355,25 @@ export default function HomePage() {
                         <p className="text-lg text-slate-500 font-medium">Find your path by exploring our most in-demand course offerings.</p>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                        {!loadingCourses ? publicCourses.map((course, i) => (
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-8">
+                        {!loadingCourses ? (publicCourses.length > 0 ? publicCourses : fallbackCourses).map((course, i) => (
                             <motion.div 
                                 key={course._id}
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 transition={{ delay: i * 0.05 }}
                                 whileHover={{ y: -10 }}
-                                className="bg-slate-50 p-8 rounded-[2.5rem] border border-slate-100 text-center flex flex-col group cursor-pointer"
-                                onClick={() => navigate(`/register?courseId=${course._id}&courseName=${course.title}`)}
+                                className="bg-slate-50 p-4 sm:p-8 rounded-[1.5rem] sm:rounded-[2.5rem] border border-slate-100 text-center flex flex-col group cursor-pointer"
+                                onClick={() => navigate(`/course/${course._id}`)}
                             >
-                                <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm group-hover:bg-primary-600 group-hover:text-white transition-all">
-                                    <BookOpen size={24} />
+                                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6 shadow-sm group-hover:bg-primary-600 group-hover:text-white transition-all text-primary-600 transition-colors">
+                                    <BookOpen size={20} className="sm:w-6 sm:h-6" />
                                 </div>
-                                <h4 className="font-black text-slate-900 text-lg mb-3 line-clamp-2 min-h-[3.5rem] font-heading">{course.title}</h4>
-                                <p className="text-xs font-black text-primary-600 uppercase tracking-widest font-space mb-6">{course.category}</p>
+                                <h4 className="font-black text-slate-900 text-sm sm:text-lg mb-2 sm:mb-3 line-clamp-2 min-h-[2.5rem] sm:min-h-[3.5rem] font-heading">{course.title}</h4>
+                                <p className="text-[10px] sm:text-xs font-black text-primary-600 uppercase tracking-widest font-space mb-4 sm:mb-6">{course.category}</p>
                                 <div className="mt-auto">
-                                    <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover:text-primary-600 transition-colors">
-                                        View Details <ArrowRight size={14} />
+                                    <span className="inline-flex items-center gap-2 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover:text-primary-600 transition-colors">
+                                        View <ArrowRight size={12} className="sm:w-3.5 sm:h-3.5" />
                                     </span>
                                 </div>
                             </motion.div>
