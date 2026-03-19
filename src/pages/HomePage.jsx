@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BookOpen, Users, Award, ArrowRight, Globe, ShieldCheck } from "lucide-react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -52,12 +52,7 @@ export default function HomePage() {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ["start start", "end end"]
-    });
-
-    const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+    // Scroll logic removed for new banner design
 
     useEffect(() => {
         // Hero Section Animation
@@ -164,154 +159,105 @@ export default function HomePage() {
                 </div>
             </motion.nav>
 
-            {/* Hero Section */}
-            <section ref={heroRef} className="hero-trigger relative pt-32 lg:pt-48 pb-20 bg-white">
-                <motion.div 
-                    style={{ y: backgroundY }}
-                    className="absolute inset-0 overflow-hidden pointer-events-none -z-10"
-                >
-                    <div className="absolute top-[5%] -right-[10%] w-[800px] h-[800px] bg-primary-50 rounded-full blur-[150px] opacity-60" />
-                    <div className="absolute bottom-[5%] -left-[10%] w-[800px] h-[800px] bg-blue-50 rounded-full blur-[150px] opacity-60" />
-                </motion.div>
+            {/* Hero Banner Section */}
+            <section ref={heroRef} className="hero-trigger relative min-h-[85vh] flex items-center justify-center overflow-hidden bg-white">
+                {/* Background Image Layer with Blur */}
+                <div className="absolute inset-0 z-0">
+                    <img 
+                        src="/image.png" 
+                        alt="Hero Banner" 
+                        className="w-full h-full object-cover scale-105" 
+                    />
+                    <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-[6px]" />
+                </div>
 
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex flex-col lg:flex-row items-center gap-16">
-                        <div className="flex-1 text-center lg:text-left">
-                            <motion.div 
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ duration: 0.5, delay: 0.5 }}
-                                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white shadow-sm border border-slate-100 text-primary-700 mb-8"
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+                    <div className="flex flex-col items-center text-center">
+                        <motion.div 
+                            initial={{ opacity: 0, y: -20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8 }}
+                            className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white mb-8"
+                        >
+                            <div className="w-2 h-2 bg-primary-400 rounded-full animate-ping" />
+                            <span className="text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] font-space">Your Future Starts Here</span>
+                        </motion.div>
+
+                        <motion.h1 
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.2 }}
+                            className="text-4xl sm:text-6xl lg:text-[5rem] font-black text-white leading-[1.1] tracking-tight mb-8 font-heading drop-shadow-2xl"
+                        >
+                            Explore Professional <br />
+                            <span className="text-primary-400">Programs & Courses</span>
+                        </motion.h1>
+
+                        <motion.form 
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.8, delay: 0.4 }}
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                navigate(`/courses?category=${selectedCat}`);
+                            }}
+                            className="flex flex-col sm:flex-row items-center gap-3 w-full max-w-2xl bg-white/95 backdrop-blur-xl p-3 rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] border border-white/20 relative"
+                        >
+                            <div 
+                                ref={triggerRef}
+                                onClick={() => setDropdownOpen(!dropdownOpen)}
+                                className="flex-1 w-full bg-transparent px-8 py-5 text-slate-600 font-bold outline-none border-none cursor-pointer flex justify-between items-center group font-sans"
                             >
-                                <div className="w-2 h-2 bg-primary-600 rounded-full animate-ping" />
-                                <span className="text-xs font-black uppercase tracking-[0.2em] font-space text-slate-500">Next-Gen Learning 2026</span>
-                            </motion.div>
-
-                            <h1 ref={titleRef} className="text-6xl lg:text-[6.5rem] font-black text-slate-900 leading-[0.95] tracking-tight mb-8 font-heading">
-                                Master Your <br />
-                                <span className="text-gradient">Future Skills</span>
-                            </h1>
-
-                            <motion.p 
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.8, delay: 0.8 }}
-                                className="text-xl text-slate-500 mb-12 leading-relaxed max-w-xl mx-auto lg:mx-0 font-medium"
+                                <span className="text-slate-700 text-[16px]">{selectedCat === "All" ? "All Categories" : selectedCat}</span>
+                                <svg className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${dropdownOpen ? 'rotate-180 text-primary-600' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                            
+                            <div 
+                                ref={dropdownRef} 
+                                data-lenis-prevent="true"
+                                onWheel={(e) => e.stopPropagation()}
+                                className="absolute top-[110%] left-0 right-0 sm:left-4 sm:right-auto sm:w-[300px] max-h-[300px] overflow-y-auto overscroll-contain bg-white rounded-3xl shadow-2xl border border-slate-100 z-[70] py-3 hidden custom-scrollbar"
                             >
-                                A premium educational ecosystem designed to bridge the gap between students and expert faculty through interactive learning experiences.
-                            </motion.p>
+                                {categories.map(cat => (
+                                    <div 
+                                        key={cat}
+                                        onClick={() => {
+                                            setSelectedCat(cat);
+                                            setDropdownOpen(false);
+                                        }}
+                                        className={`px-6 py-4 cursor-pointer text-[15px] transition-all duration-200 ${selectedCat === cat ? 'bg-primary-600 text-white font-bold tracking-wide' : 'text-slate-600 font-semibold hover:bg-slate-50 hover:text-primary-600 hover:pl-8'}`}
+                                    >
+                                        {cat === "All" ? "Select Category" : cat}
+                                    </div>
+                                ))}
+                            </div>
 
-                            <motion.form 
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.8, delay: 1 }}
-                                onSubmit={(e) => {
-                                    e.preventDefault();
-                                    navigate(`/courses?category=${selectedCat}`);
-                                }}
-                                className="flex flex-col sm:flex-row items-center gap-3 justify-center lg:justify-start w-full max-w-lg mx-auto lg:mx-0 bg-white p-2 rounded-[2rem] shadow-2xl border border-slate-100 relative"
-                            >
-                                <div 
-                                    ref={triggerRef}
-                                    onClick={() => setDropdownOpen(!dropdownOpen)}
-                                    className="flex-1 w-full bg-transparent px-6 py-4 text-slate-600 font-bold outline-none border-none cursor-pointer flex justify-between items-center group font-sans"
-                                >
-                                    <span className="text-slate-700 text-[15px]">{selectedCat === "All" ? "All Categories" : selectedCat}</span>
-                                    <svg className={`w-4 h-4 text-slate-400 transition-transform duration-300 ${dropdownOpen ? 'rotate-180 text-primary-600' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
-                                </div>
-                                
-                                <div 
-                                    ref={dropdownRef} 
-                                    data-lenis-prevent="true"
-                                    onWheel={(e) => e.stopPropagation()}
-                                    className="absolute top-full left-4 mt-3 w-[240px] max-h-[220px] overflow-y-auto overscroll-contain bg-white rounded-2xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.1)] border border-slate-100 z-[60] py-2 hidden custom-scrollbar"
-                                >
-                                    {categories.map(cat => (
-                                        <div 
-                                            key={cat}
-                                            onClick={() => {
-                                                setSelectedCat(cat);
-                                                setDropdownOpen(false);
-                                            }}
-                                            className={`px-5 py-3 cursor-pointer text-sm transition-all duration-200 ${selectedCat === cat ? 'bg-primary-600 text-white font-bold tracking-wide' : 'text-slate-600 font-medium hover:bg-slate-50 hover:text-primary-600 hover:pl-6'}`}
-                                        >
-                                            {cat === "All" ? "All Categories" : cat}
-                                        </div>
-                                    ))}
-                                </div>
-
-                                <button type="submit" className="w-full sm:w-auto px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white rounded-[1.5rem] font-black text-sm shadow-xl shadow-primary-200 transition-all font-sans tracking-wide shrink-0 z-10 relative">
-                                    Search Courses
-                                </button>
-                            </motion.form>
-
-                            <motion.div 
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 1.2 }}
-                                className="mt-12 flex items-center gap-6 justify-center lg:justify-start"
-                            >
-                                <div className="flex -space-x-4">
-                                    {[1, 2, 3, 4].map(i => (
-                                        <motion.img 
-                                            key={i} 
-                                            whileHover={{ y: -5, zIndex: 10 }}
-                                            className="w-12 h-12 rounded-full border-4 border-white shadow-md cursor-pointer" 
-                                            src={`https://i.pravatar.cc/100?img=${i + 15}`} 
-                                            alt="User" 
-                                        />
-                                    ))}
-                                    <div className="w-12 h-12 rounded-full border-4 border-white bg-slate-900 text-white text-[10px] flex items-center justify-center font-bold shadow-md">+12k</div>
-                                </div>
-                                <div className="text-sm font-bold text-slate-400 uppercase tracking-widest font-space">Global Students</div>
-                            </motion.div>
-                        </div>
+                            <button type="submit" className="w-full sm:w-auto px-12 py-5 bg-primary-600 hover:bg-primary-700 text-white rounded-[2rem] font-black text-base shadow-xl shadow-primary-700/20 transition-all font-sans tracking-wide shrink-0 z-10 relative flex items-center justify-center gap-3 group">
+                                Search Now
+                                <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                            </button>
+                        </motion.form>
 
                         <motion.div 
-                            initial={{ opacity: 0, x: 100 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 1, ease: "power3.out", delay: 0.5 }}
-                            className="flex-1 w-full max-w-2xl relative"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.8 }}
+                            className="mt-12 flex items-center gap-8 text-white/80"
                         >
-                            <div className="relative z-10 rounded-[3.5rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] border-[15px] border-white ring-1 ring-slate-100">
-                                <motion.img 
-                                    whileHover={{ scale: 1.05 }}
-                                    transition={{ duration: 1.5 }}
-                                    src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop" 
-                                    alt="Learning" 
-                                    className="w-full h-auto object-cover" 
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent" />
-                                <motion.div 
-                                    initial={{ y: 50, opacity: 0 }}
-                                    animate={{ y: 0, opacity: 1 }}
-                                    transition={{ delay: 1, duration: 0.8 }}
-                                    className="absolute bottom-10 left-10 right-10 bg-white/90 backdrop-blur-xl p-8 rounded-[2.5rem] flex items-center justify-between shadow-2xl"
-                                >
-                                    <div>
-                                        <p className="text-primary-600 text-xs font-black uppercase tracking-widest mb-1 font-space">Live Session</p>
-                                        <h4 className="font-black text-slate-900 text-xl font-heading">Advanced UI Architecture</h4>
-                                    </div>
-                                    <div className="bg-red-500 text-white text-[10px] font-black px-4 py-2 rounded-full animate-pulse uppercase tracking-widest font-space">Live</div>
-                                </motion.div>
+                            <div className="flex flex-col items-center">
+                                <span className="text-2xl font-black text-white">12k+</span>
+                                <span className="text-[10px] uppercase tracking-widest font-bold opacity-60">Students</span>
                             </div>
-                            {/* Decorative element */}
-                            <motion.div 
-                                animate={{ 
-                                    scale: [1, 1.1, 1],
-                                    rotate: [0, 5, 0]
-                                }}
-                                transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                                className="absolute -bottom-16 -right-16 w-64 h-64 bg-blue-600/20 rounded-full blur-[80px] -z-10" 
-                            />
-                            <motion.div 
-                                animate={{ 
-                                    scale: [1, 1.2, 1],
-                                    rotate: [0, -5, 0]
-                                }}
-                                transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-                                className="absolute -top-16 -left-16 w-64 h-64 bg-primary-600/20 rounded-full blur-[80px] -z-10" 
-                            />
+                            <div className="w-px h-10 bg-white/20" />
+                            <div className="flex flex-col items-center">
+                                <span className="text-2xl font-black text-white">500+</span>
+                                <span className="text-[10px] uppercase tracking-widest font-bold opacity-60">Courses</span>
+                            </div>
+                            <div className="w-px h-10 bg-white/20" />
+                            <div className="flex flex-col items-center">
+                                <span className="text-2xl font-black text-white">4.9/5</span>
+                                <span className="text-[10px] uppercase tracking-widest font-bold opacity-60">Rating</span>
+                            </div>
                         </motion.div>
                     </div>
                 </div>
