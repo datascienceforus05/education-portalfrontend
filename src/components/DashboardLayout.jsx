@@ -59,8 +59,13 @@ export default function DashboardLayout({ children }) {
 
     const SidebarContent = () => (
         <div className="flex flex-col h-full">
-            <div className={`flex items-center gap-3 p-5 border-b border-primary-700/50 ${collapsed ? "justify-center" : ""}`}>
-                <img src="https://www.collegemobi.com/images/logo.png" alt="CollegeMobi Logo" className={`${collapsed ? "h-6 w-auto" : "h-10 w-auto"} object-contain transition-all`} />
+            <div className={`flex items-center gap-2 p-5 border-b border-primary-700/50 ${collapsed ? "justify-center" : ""}`}>
+                <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center shrink-0">
+                    <span className="text-white font-black text-sm italic">S</span>
+                </div>
+                {!collapsed && (
+                    <span className="text-lg font-black text-white tracking-widest font-heading">SHALOM <span className="text-primary-300 italic">EDU</span></span>
+                )}
             </div>
 
             {/* User Info */}

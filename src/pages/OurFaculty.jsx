@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { getFaculty } from "../api";
-import { User, Briefcase, GraduationCap, ArrowLeft, Mail, Github, Linkedin, Twitter } from "lucide-react";
+import { User, Briefcase, GraduationCap, Mail, Github, Linkedin, Twitter } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 export default function OurFaculty() {
     const navigate = useNavigate();
@@ -24,16 +25,8 @@ export default function OurFaculty() {
 
     return (
         <div className="min-h-screen bg-slate-50 font-sans selection:bg-primary-100 selection:text-primary-700">
-            {/* Header */}
-            <div className="bg-white border-b border-slate-200 sticky top-0 z-50">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-                    <button onClick={() => navigate('/')} className="flex items-center gap-2 text-slate-500 hover:text-primary-600 font-black uppercase tracking-widest text-xs transition-colors group">
-                        <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" /> Back to Home
-                    </button>
-                    <h1 className="text-sm font-black uppercase tracking-widest text-slate-400">Our Academic Faculty</h1>
-                    <div className="w-20 hidden sm:block" />
-                </div>
-            </div>
+            {/* Navigation */}
+            <Navbar />
 
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
                 <div className="text-center max-w-3xl mx-auto mb-20 space-y-6">

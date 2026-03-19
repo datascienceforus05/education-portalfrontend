@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { getBoardMembers } from "../api";
-import { Briefcase, ArrowLeft, Mail, Linkedin, Twitter, Globe } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Briefcase, Mail, Linkedin, Twitter, Globe } from "lucide-react";
+import Navbar from "../components/Navbar";
 
 export default function OurBoard() {
-    const navigate = useNavigate();
     const [board, setBoard] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -24,21 +23,13 @@ export default function OurBoard() {
 
     return (
         <div className="min-h-screen bg-slate-50 font-sans selection:bg-primary-100 selection:text-primary-700">
-            {/* Header */}
-            <div className="bg-white border-b border-slate-200 sticky top-0 z-50">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-                    <button onClick={() => navigate('/')} className="flex items-center gap-2 text-slate-500 hover:text-primary-600 font-black uppercase tracking-widest text-xs transition-colors group">
-                        <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" /> Back to Home
-                    </button>
-                    <h1 className="text-sm font-black uppercase tracking-widest text-slate-400">Institutional Board</h1>
-                    <div className="w-20 hidden sm:block" />
-                </div>
-            </div>
+            {/* Navigation */}
+            <Navbar />
 
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
                 <div className="text-center max-w-3xl mx-auto mb-20 space-y-6">
                     <h2 className="text-5xl lg:text-7xl font-black text-slate-900 font-heading leading-tight animate-slide-up">The Board of Directors</h2>
-                    <p className="text-lg text-slate-500 font-medium leading-relaxed animate-delay-1">Our leadership team brings together decades of expertise in global education, technology, and organizational growth to shape the future of Shalom EDU.</p>
+                    <p className="text-lg text-slate-500 font-medium leading-relaxed animate-delay-1">Our leadership team brings together decades of expertise in global education, technology, and organizational growth to shape the future of COLLEGEMOBI EDU.</p>
                 </div>
 
                 <div className="grid sm:grid-cols-2 lg:grid-cols-2 gap-12 max-w-5xl mx-auto">
@@ -95,7 +86,7 @@ export default function OurBoard() {
                     <div className="space-y-8">
                         <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full border border-white/10 text-primary-400 text-xs font-black uppercase tracking-[0.2em]">Our Vision 2030</div>
                         <h3 className="text-5xl font-black text-white font-heading leading-tight italic">&quot;Empowering the next generation through ethical leadership and accessible innovation.&quot;</h3>
-                        <p className="text-slate-400 text-xl leading-relaxed">The board is committed to steering Shalom EDU towards a future where quality education knows no boundaries, leveraging cutting-edge technology to create global impact.</p>
+                        <p className="text-slate-400 text-xl leading-relaxed">The board is committed to steering COLLEGEMOBI EDU towards a future where quality education knows no boundaries, leveraging cutting-edge technology to create global impact.</p>
                     </div>
                     <div className="grid grid-cols-2 gap-6">
                         {[

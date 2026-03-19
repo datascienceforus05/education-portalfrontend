@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { getPublicCourses } from "../api";
-import { Users, Clock, Tag, ArrowLeft } from "lucide-react";
+import { Users, Clock, Tag } from "lucide-react";
 import { motion } from "framer-motion";
+import Navbar from "../components/Navbar";
 
 export default function CoursesPage() {
     const [searchParams] = useSearchParams();
@@ -32,19 +33,7 @@ export default function CoursesPage() {
     return (
         <div className="min-h-screen bg-slate-50 font-sans selection:bg-primary-100 selection:text-primary-700">
             {/* Header / Navbar */}
-            <nav className="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between items-center h-20">
-                        <Link to="/" className="flex items-center gap-3 group">
-                            <img src="https://www.collegemobi.com/images/logo.png" alt="CollegeMobi Logo" className="h-10 w-auto object-contain transition-transform group-hover:scale-105" />
-                            <span className="text-xl font-black text-slate-800 tracking-tighter hidden sm:block">Explore Courses</span>
-                        </Link>
-                        <Link to="/" className="text-sm font-bold text-slate-500 hover:text-primary-600 flex items-center gap-2">
-                            <ArrowLeft size={16} /> Back to Home
-                        </Link>
-                    </div>
-                </div>
-            </nav>
+            <Navbar />
 
             {/* Banner Area */}
             <div className="bg-gradient-to-br from-primary-900 to-slate-900 py-16 relative overflow-hidden">

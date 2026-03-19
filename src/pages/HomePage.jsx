@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import Navbar from "../components/Navbar";
 import { BookOpen, Users, Award, ArrowRight, Globe } from "lucide-react";
 import { motion } from "framer-motion";
 import { getPublicCourses } from "../api";
@@ -13,6 +14,16 @@ export default function HomePage() {
     const titleRef = useRef(null);
     const containerRef = useRef(null);
     const navigate = useNavigate();
+    const location = useLocation();
+
+    useEffect(() => {
+        if (location.state?.scrollTo) {
+            setTimeout(() => {
+                const el = document.getElementById(location.state.scrollTo);
+                if (el) window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' });
+            }, 100);
+        }
+    }, [location]);
 
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [selectedCat, setSelectedCat] = useState("All");
@@ -140,55 +151,9 @@ export default function HomePage() {
                 }
             `}} />
 
-            {/* Navigation */}
-            <motion.nav 
-                initial={{ y: -100 }}
-                animate={{ y: 0 }}
-                transition={{ duration: 0.8, ease: "circOut" }}
-                className="fixed w-full z-50 bg-white/80 backdrop-blur-2xl border-b border-slate-200/50"
-            >
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between items-center h-20">
-                        <motion.div 
-                            whileHover={{ scale: 1.02 }}
-                            className="flex items-center gap-3 group cursor-pointer" 
-                            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                        >
-                            <img src="https://www.collegemobi.com/images/logo.png" alt="CollegeMobi Logo" className="h-12 w-auto object-contain transition-transform group-hover:scale-105" />
-                        </motion.div>
-
-                        <div className="hidden md:flex items-center gap-10">
-                            {['Features', 'Stats', 'About', 'Faculty', 'Board Members'].map((item) => (
-                                <button
-                                    key={item}
-                                    onClick={() => {
-                                        if (item === 'Faculty') navigate('/faculty-list');
-                                        else if (item === 'Board Members') navigate('/board-list');
-                                        else scrollToSection(item.toLowerCase());
-                                    }}
-                                    className="text-sm font-bold text-slate-600 hover:text-primary-600 transition-colors uppercase tracking-widest font-space"
-                                >
-                                    {item}
-                                </button>
-                            ))}
-                        </div>
-
-                        <div className="flex items-center gap-4">
-                            <Link to="/login" className="hidden sm:block px-6 py-2.5 text-sm font-bold text-slate-700 hover:text-primary-600 transition-colors font-space">
-                                Sign In
-                            </Link>
-                            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                                <Link to="/register" className="px-7 py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-2xl text-sm font-black shadow-2xl shadow-slate-200 transition-all font-space">
-                                    Join Now
-                                </Link>
-                            </motion.div>
-                        </div>
-                    </div>
-                </div>
-            </motion.nav>
-
+            <Navbar />
             {/* Hero Banner Section */}
-            <section ref={heroRef} className="hero-trigger relative min-h-[500px] sm:min-h-[600px] flex items-center justify-center bg-slate-50 pt-20">
+            <section ref={heroRef} className="hero-trigger relative min-h-[400px] sm:min-h-[480px] flex items-center justify-center bg-slate-50 pt-20">
                 {/* Clean Premium Background */}
                 <div className="absolute inset-0 z-0 bg-white overflow-hidden">
                     <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[70%] bg-primary-200/50 rounded-full blur-[120px]" />
@@ -198,8 +163,9 @@ export default function HomePage() {
                     <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-slate-50 to-transparent z-10" />
                 </div>
 
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-30 pt-44 pb-32">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-30 pt-32 pb-20">
                     <div className="flex flex-col items-center text-center">
+                        {/* 
                         <motion.div 
                             initial={{ opacity: 0, y: -20 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -209,6 +175,7 @@ export default function HomePage() {
                             <div className="w-2 h-2 bg-primary-500 rounded-full animate-ping" />
                             <span className="text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] font-space text-slate-500">Your Future Starts Here</span>
                         </motion.div>
+                        */}
 
                         <motion.h1 
                             initial={{ opacity: 0, y: 20 }}
@@ -216,8 +183,8 @@ export default function HomePage() {
                             transition={{ duration: 0.8, delay: 0.2 }}
                             className="text-3xl sm:text-5xl lg:text-[4.5rem] font-black text-slate-900 leading-[1.1] tracking-tight mb-8 font-heading"
                         >
-                            Explore Professional <br />
-                            <span className="text-primary-600">Programs & Courses</span>
+                             Education Anytime, Anywhere <br />
+                            <span className="text-primary-600"> Find Courses</span>
                         </motion.h1>
 
                         <motion.form 
@@ -271,7 +238,7 @@ export default function HomePage() {
             </section>
 
             {/* Features Grid */}
-            <section id="features" className="py-40 bg-white relative">
+            <section id="features" className="py-20 sm:py-24 bg-slate-50 relative border-t border-slate-100">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-24 max-w-4xl mx-auto">
                         <motion.div 
@@ -382,14 +349,15 @@ export default function HomePage() {
                             </motion.div>
                         )) : (
                             Array(4).fill(0).map((_, i) => (
-                                <div key={i} className="bg-slate-50 h-[300px] rounded-[2.5rem] animate-pulse" />
+                                 <div key={i} className="bg-slate-50 h-[300px] rounded-[2.5rem] animate-pulse" />
                             ))
                         )}
                     </div>
                 </div>
             </section>
 
-            {/* Stats Section */}
+
+            {/* 
             <section id="stats" className="py-32 bg-slate-900 overflow-hidden relative">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary-900/20 via-slate-900 to-slate-900" />
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -423,9 +391,11 @@ export default function HomePage() {
                     </div>
                 </div>
             </section>
+            */}
 
             {/* About Section */}
-            <section id="about" className="py-40 bg-slate-50 overflow-hidden">
+            <section id="about" className="py-20 sm:py-24 bg-slate-50 overflow-hidden">
+
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex flex-col lg:flex-row items-center gap-32">
                         <div className="flex-1 space-y-12">
@@ -445,9 +415,11 @@ export default function HomePage() {
                                 <p className="bg-white p-8 rounded-[2rem] border-l-8 border-primary-600 shadow-sm italic text-slate-900">
                                     &ldquo;The guiding mission of CollegeMobi is deliver the absolute best experience and results for the students. We are not the company ourselves, but we fill a role that can be even more valuable in your life as the all-in-one resource to educate, connect, and facilitate your education.&rdquo;
                                 </p>
+                                {/* 
                                 <p>
                                     We believe that clear and efficient planning is critical to the well-being of an student and school. Our unique ability to take this philosophy and turn it into a superior set of services for our students is a result of our deep understanding of our student needs and concerns.
                                 </p>
+                                */}
                             </div>
 
                             <div className="flex flex-wrap gap-4">
@@ -459,6 +431,7 @@ export default function HomePage() {
                         <div className="flex-1 relative">
                             <div className="relative z-10 grid grid-cols-2 gap-8">
                                 <div className="space-y-8 pt-16">
+                                    {/* 
                                     <motion.div 
                                         whileHover={{ scale: 0.95, rotate: -2 }}
                                         className="bg-white p-8 rounded-[2.5rem] shadow-2xl flex flex-col justify-center border border-slate-100"
@@ -466,6 +439,7 @@ export default function HomePage() {
                                         <p className="text-slate-500 font-bold mb-4">We believe that clear and efficient planning is critical to the well-being of an student and school.</p>
                                         <div className="w-12 h-1 bg-primary-600" />
                                     </motion.div>
+                                    */}
                                     <motion.div 
                                         whileHover={{ scale: 0.95, rotate: 2 }}
                                         className="rounded-[3rem] overflow-hidden shadow-2xl h-[300px]"
@@ -493,6 +467,7 @@ export default function HomePage() {
                         </div>
                     </div>
 
+                    {/* 
                     <div className="mt-40 bg-white rounded-[4rem] p-12 lg:p-24 shadow-2xl border border-slate-50">
                         <div className="max-w-4xl mx-auto space-y-10">
                             <h3 className="text-4xl font-black text-slate-900 font-heading">Our Philosophy</h3>
@@ -506,34 +481,35 @@ export default function HomePage() {
                             </div>
                         </div>
                     </div>
+                    */}
                 </div>
             </section>
 
             {/* CTA Section */}
-            <section className="py-40 bg-white">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <section className="py-48 bg-white min-h-[85vh] flex items-center justify-center">
+                <div className="max-w-[1600px] mx-auto px-4 sm:px-12 lg:px-20 w-full">
                     <motion.div 
-                        whileHover={{ scale: 0.99 }}
-                        className="bg-slate-900 rounded-[4.5rem] p-16 lg:p-32 text-center relative overflow-hidden group shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)]"
+                        whileHover={{ scale: 0.995 }}
+                        className="bg-slate-900 rounded-[5rem] p-24 lg:p-40 text-center relative overflow-hidden group shadow-[0_50px_120px_-30px_rgba(0,0,0,0.6)] w-full"
                     >
-                        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary-600/30 rounded-full blur-[150px] group-hover:scale-125 transition-transform duration-1000" />
-                        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-600/30 rounded-full blur-[150px] group-hover:scale-125 transition-transform duration-1000" />
+                        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary-600/20 rounded-full blur-[200px] group-hover:scale-110 transition-transform duration-1000" />
+                        <div className="absolute bottom-0 left-0 w-[800px] h-[800px] bg-blue-600/20 rounded-full blur-[200px] group-hover:scale-110 transition-transform duration-1000" />
 
-                        <div className="relative z-10 w-full max-w-5xl mx-auto">
-                            <h2 className="text-6xl lg:text-[7.5rem] font-black text-white mb-10 tracking-[ -0.05em] leading-[0.9] font-heading">
+                        <div className="relative z-10 w-full max-w-6xl mx-auto">
+                            <h2 className="text-6xl lg:text-[8rem] xl:text-[9rem] font-black text-white mb-12 tracking-[-0.04em] leading-[0.85] font-heading">
                                 Start Your <br /> Evolution Today
                             </h2>
-                            <p className="text-2xl text-slate-400 mb-16 max-w-3xl mx-auto font-medium leading-relaxed font-space">
+                            <p className="text-2xl lg:text-3xl text-slate-400 mb-20 max-w-4xl mx-auto font-medium leading-relaxed font-space">
                                 Join the world&apos;s most innovative educational ecosystem. No limits, just potential.
                             </p>
-                            <div className="flex flex-col sm:flex-row items-center justify-center gap-8">
-                                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="w-full sm:w-auto">
-                                    <Link to="/register" className="w-full sm:w-auto px-16 py-6 bg-white hover:bg-slate-50 text-slate-900 rounded-[2.5rem] font-black text-xl transition-all shadow-2xl flex items-center justify-center gap-3 font-space">
-                                        Join for Free <ArrowRight size={24} />
+                            <div className="flex flex-col sm:flex-row items-center justify-center gap-10">
+                                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full sm:w-auto">
+                                    <Link to="/register" className="w-full sm:w-auto px-20 py-8 bg-white hover:bg-slate-50 text-slate-900 rounded-[3rem] font-black text-2xl transition-all shadow-2xl flex items-center justify-center gap-4 font-space whitespace-nowrap">
+                                        Join Now <ArrowRight size={32} />
                                     </Link>
                                 </motion.div>
-                                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="w-full sm:w-auto">
-                                    <Link to="/login" className="w-full sm:w-auto px-16 py-6 bg-transparent border-2 border-slate-700 hover:border-slate-500 text-white rounded-[2.5rem] font-black text-xl transition-all flex items-center justify-center gap-2 font-space">
+                                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full sm:w-auto">
+                                    <Link to="/login" className="w-full sm:w-auto px-20 py-8 bg-transparent border-2 border-slate-700 hover:border-slate-500 text-white rounded-[3rem] font-black text-2xl transition-all flex items-center justify-center gap-3 font-space whitespace-nowrap">
                                         Partner Portal
                                     </Link>
                                 </motion.div>
@@ -543,14 +519,16 @@ export default function HomePage() {
                 </div>
             </section>
 
+
             {/* Footer */}
-            <footer className="py-32 bg-slate-50 border-t border-slate-200">
+            <footer className="py-20 sm:py-24 bg-slate-50 border-t border-slate-200">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="grid md:grid-cols-4 gap-20 mb-20">
+                    <div className="grid md:grid-cols-4 gap-12 sm:gap-20 mb-12 sm:mb-16">
                         <div className="col-span-2 space-y-10">
                             <div className="flex items-center gap-4">
-                                <img src="https://www.collegemobi.com/images/logo.png" alt="CollegeMobi Logo" className="h-16 w-auto object-contain" />
+                                <img src="https://www.collegemobi.com/images/logo.png" alt="CollegeMobi Logo" className="h-16 sm:h-20 w-auto object-contain" />
                             </div>
+
                             <p className="text-slate-500 max-w-md font-medium text-xl leading-relaxed">
                                 Redefining digital pedagogy through intelligent design and seamless user experience.
                             </p>

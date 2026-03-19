@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { getPublicCourseDetails } from "../api";
-import { ArrowLeft, Clock, Award, CheckCircle2, ShieldCheck, Star, Users, ArrowRight } from "lucide-react";
+import { Clock, Award, CheckCircle2, ShieldCheck, Star, Users, ArrowRight } from "lucide-react";
+import Navbar from "../components/Navbar";
 
 export default function CourseDetails() {
     const { id } = useParams();
-    const navigate = useNavigate();
     const [course, setCourse] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -48,17 +48,7 @@ export default function CourseDetails() {
     return (
         <div className="min-h-screen bg-slate-50 font-sans selection:bg-primary-100 selection:text-primary-700">
             {/* Header */}
-            <div className="bg-white border-b border-slate-200 sticky top-0 z-50">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-                    <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-slate-500 hover:text-primary-600 font-black uppercase tracking-widest text-xs transition-colors group">
-                        <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" /> Back to Explore
-                    </button>
-                    <div className="hidden sm:flex items-center gap-4">
-                         <Link to="/login" className="px-6 py-2 text-sm font-bold text-slate-600">Sign In</Link>
-                         <Link to={`/register?courseId=${id}&courseName=${course?.title}`} className="px-8 py-3 bg-slate-900 text-white rounded-2xl text-sm font-black shadow-xl">Enroll Now</Link>
-                    </div>
-                </div>
-            </div>
+            <Navbar />
 
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 animate-slide-up">
                 <div className="grid lg:grid-cols-3 gap-16">
