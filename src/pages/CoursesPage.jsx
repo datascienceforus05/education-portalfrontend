@@ -10,7 +10,7 @@ export default function CoursesPage() {
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const categories = ["All", "IT", "Medical", "Engineering", "Law", "Nursing"];
+    const categories = ["All", "Engineering", "Medical", "Law", "Technology", "Fine Arts", "Social Science"];
     const [activeCategory, setActiveCategory] = useState(category || "All");
 
     useEffect(() => {
@@ -113,10 +113,10 @@ export default function CoursesPage() {
                                             <span className="text-sm font-semibold text-slate-600 truncate max-w-[100px]">{course.faculty?.name || "System"}</span>
                                         </div>
                                         <Link 
-                                            to={`/register?courseId=${course._id}&courseName=${encodeURIComponent(course.title)}`}
+                                            to={`/course/${course._id}`}
                                             className="px-4 py-2 bg-slate-900 hover:bg-primary-600 text-white text-sm font-black rounded-xl transition-colors shadow-md"
                                         >
-                                            Enroll Now
+                                            View Details
                                         </Link>
                                     </div>
                                 </div>

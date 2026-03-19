@@ -184,7 +184,7 @@ export default function HomePage() {
             </motion.nav>
 
             {/* Hero Banner Section */}
-            <section ref={heroRef} className="hero-trigger relative min-h-[500px] sm:min-h-[600px] flex items-center justify-center overflow-hidden bg-slate-900 pt-20">
+            <section ref={heroRef} className="hero-trigger relative min-h-[500px] sm:min-h-[600px] flex items-center justify-center bg-slate-900 pt-20">
                 {/* Background Image Layer with Blur */}
                 <div className="absolute inset-0 z-0">
                     <img 
@@ -192,10 +192,10 @@ export default function HomePage() {
                         alt="Hero Banner" 
                         className="w-full h-full object-cover opacity-80" 
                     />
-                    <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-[8px]" />
+                    <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-white to-transparent z-10" />
                 </div>
 
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-30 pt-44 pb-32">
                     <div className="flex flex-col items-center text-center">
                         <motion.div 
                             initial={{ opacity: 0, y: -20 }}
@@ -225,7 +225,7 @@ export default function HomePage() {
                                 e.preventDefault();
                                 navigate(`/courses?category=${selectedCat}`);
                             }}
-                            className="flex flex-col sm:flex-row items-center gap-3 w-full max-w-2xl bg-white/10 backdrop-blur-md p-3 rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] border border-white/20 relative"
+                            className="flex flex-col sm:flex-row items-center gap-3 w-full max-w-2xl bg-white/10 backdrop-blur-md p-3 rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] border border-white/20 relative z-50"
                         >
                             <div 
                                 ref={triggerRef}

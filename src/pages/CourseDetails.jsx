@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { getCourse } from "../api";
+import { getPublicCourseDetails } from "../api";
 import { ArrowLeft, Clock, Award, CheckCircle2, ShieldCheck, Star, Users, ArrowRight } from "lucide-react";
 
 export default function CourseDetails() {
@@ -13,10 +13,8 @@ export default function CourseDetails() {
         window.scrollTo(0, 0);
         const fetchCourse = async () => {
             try {
-                // We'll use getCourse (protected) or a public version if needed.
-                // For now, let's assume getCourse works if we handle errors or have a public endpoint.
-                // To be safe for non-logged-in users, I'll use a fetch directly to the public route if id is available.
-                const res = await getCourse(id);
+                // Use public endpoint for details so even logged-out users can see them
+                const res = await getPublicCourseDetails(id);
                 setCourse(res.data.course);
             } catch (err) {
                 console.error(err);
