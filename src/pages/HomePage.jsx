@@ -3,7 +3,6 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { BookOpen, Users, Award, ArrowRight, Globe } from "lucide-react";
 import { motion } from "framer-motion";
-import { getPublicCourses } from "../api";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -27,32 +26,9 @@ export default function HomePage() {
 
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [selectedCat, setSelectedCat] = useState("All");
-    const [publicCourses, setPublicCourses] = useState([]);
-    const [loadingCourses, setLoadingCourses] = useState(true);
     const dropdownRef = useRef(null);
     const triggerRef = useRef(null);
     const categories = ["All", "Engineering", "Medical", "Law", "Technology", "Fine Arts", "Social Science"];
-
-    const fallbackCourses = [
-        { _id: "f1", title: "Advanced Aerospace Engineering", category: "Engineering" },
-        { _id: "f2", title: "MBBS Specialisations", category: "Medical" },
-        { _id: "f3", title: "Corporate Law", category: "Law" },
-        { _id: "f4", title: "Full Stack Development", category: "Technology" }
-    ];
-
-    useEffect(() => {
-        const fetchPublicCourses = async () => {
-            try {
-                const res = await getPublicCourses();
-                setPublicCourses(res.data.courses?.slice(0, 8) || []); // Corrected mapping to .courses
-            } catch (err) {
-                console.error("Error fetching courses:", err);
-            } finally {
-                setLoadingCourses(false);
-            }
-        };
-        fetchPublicCourses();
-    }, []);
 
     useEffect(() => {
         if (!dropdownRef.current) return;
@@ -238,21 +214,21 @@ export default function HomePage() {
             </section>
 
             {/* Features Grid */}
-            <section id="features" className="py-20 sm:py-24 bg-slate-50 relative border-t border-slate-100">
+            <section id="features" className="py-12 sm:py-16 bg-slate-50 relative border-t border-slate-100">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center mb-24 max-w-4xl mx-auto">
+                    <div className="text-center mb-16 max-w-4xl mx-auto">
                         <motion.div 
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            className="text-primary-600 font-black uppercase tracking-[0.4em] text-xs mb-6 font-space"
+                            className="text-primary-600 font-bold uppercase text-xs mb-4 font-sans"
                         >
                             The Future of Education
                         </motion.div>
-                        <h2 className="text-5xl lg:text-5xl font-black text-slate-900 mb-8 font-heading">Powerful Tools for Growth</h2>
-                        <p className="text-xl text-slate-500 font-medium leading-relaxed">Experience a seamless integration of learning and management in one ultra-responsive dashboard.</p>
+                        <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-6 font-sans">Powerful Tools for Growth</h2>
+                        <p className="text-lg text-slate-500 font-medium leading-relaxed font-sans">Experience a seamless integration of learning and management in one ultra-responsive dashboard.</p>
                     </div>
 
-                    <div className="grid md:grid-cols-3 gap-12 mb-32">
+                    <div className="grid md:grid-cols-3 gap-8 mb-20">
                         {[
                             {
                                 title: "Smart Course Library",
@@ -309,10 +285,10 @@ export default function HomePage() {
                                     </div>
                                 </div>
                                 <div className="p-10 flex-1 flex flex-col">
-                                    <h3 className="text-2xl font-black text-slate-900 mb-4 group-hover:text-primary-600 transition-colors font-heading">{feature.title}</h3>
-                                    <p className="text-slate-500 leading-relaxed font-medium mb-8 flex-1 text-base">{feature.desc}</p>
-                                    <button className="flex items-center gap-3 text-xs font-black text-primary-600 group-hover:gap-5 transition-all uppercase tracking-[0.2em] font-space text-left">
-                                        Explore System <ArrowRight size={18} />
+                                    <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-primary-600 transition-colors font-sans">{feature.title}</h3>
+                                    <p className="text-slate-500 leading-relaxed font-medium mb-6 flex-1 text-sm">{feature.desc}</p>
+                                    <button className="flex items-center gap-2 text-sm font-bold text-primary-600 group-hover:gap-4 transition-all font-sans text-left">
+                                        Explore System <ArrowRight size={16} />
                                     </button>
                                 </div>
                             </motion.div>
@@ -320,38 +296,47 @@ export default function HomePage() {
                     </div>
 
                     {/* Course Tiles Grid */}
-                    <div className="max-w-4xl mx-auto text-center mb-16">
-                        <h2 className="text-4xl font-black text-slate-900 mb-4 font-heading">Popular Programs</h2>
-                        <p className="text-lg text-slate-500 font-medium">Find your path by exploring our most in-demand course offerings.</p>
+                    <div className="max-w-4xl mx-auto text-center mb-12">
+                        <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4 font-sans">Popular Programs</h2>
+                        <p className="text-lg text-slate-500 font-medium font-sans">Find your path by exploring our most in-demand course offerings.</p>
                     </div>
 
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-8">
-                        {!loadingCourses ? (publicCourses.length > 0 ? publicCourses : fallbackCourses).map((course, i) => (
+                        {[
+                            "IT & Computer Science",
+                            "Engineering",
+                            "Medical & Healthcare",
+                            "Business & Management",
+                            "Commerce & Finance",
+                            "Law & Legal Studies",
+                            "Arts & Humanities",
+                            "Media & Communication",
+                            "Science & Research",
+                            "Vocational & Skill Development",
+                            "Aviation & Hospitality",
+                            "Digital & Online Courses",
+                            "Competitive Exam Preparation"
+                        ].map((type, i) => (
                             <motion.div 
-                                key={course._id}
+                                key={type}
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 transition={{ delay: i * 0.05 }}
                                 whileHover={{ y: -10 }}
                                 className="bg-slate-50 p-4 sm:p-8 rounded-[1.5rem] sm:rounded-[2.5rem] border border-slate-100 text-center flex flex-col group cursor-pointer"
-                                onClick={() => navigate(`/course/${course._id}`)}
+                                onClick={() => navigate(`/courses?category=${encodeURIComponent(type)}`)}
                             >
                                 <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6 shadow-sm group-hover:bg-primary-600 group-hover:text-white transition-all text-primary-600 transition-colors">
                                     <BookOpen size={20} className="sm:w-6 sm:h-6" />
                                 </div>
-                                <h4 className="font-black text-slate-900 text-sm sm:text-lg mb-2 sm:mb-3 line-clamp-2 min-h-[2.5rem] sm:min-h-[3.5rem] font-heading">{course.title}</h4>
-                                <p className="text-[10px] sm:text-xs font-black text-primary-600 uppercase tracking-widest font-space mb-4 sm:mb-6">{course.category}</p>
+                                <h4 className="font-black text-slate-900 text-sm sm:text-lg mb-2 sm:mb-3 line-clamp-2 min-h-[2.5rem] sm:min-h-[3.5rem] font-heading">{type}</h4>
                                 <div className="mt-auto">
                                     <span className="inline-flex items-center gap-2 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover:text-primary-600 transition-colors">
-                                        View <ArrowRight size={12} className="sm:w-3.5 sm:h-3.5" />
+                                        View Programs <ArrowRight size={12} className="sm:w-3.5 sm:h-3.5" />
                                     </span>
                                 </div>
                             </motion.div>
-                        )) : (
-                            Array(4).fill(0).map((_, i) => (
-                                 <div key={i} className="bg-slate-50 h-[300px] rounded-[2.5rem] animate-pulse" />
-                            ))
-                        )}
+                        ))}
                     </div>
                 </div>
             </section>
@@ -394,25 +379,25 @@ export default function HomePage() {
             */}
 
             {/* About Section */}
-            <section id="about" className="py-20 sm:py-24 bg-slate-50 overflow-hidden">
+            <section id="about" className="py-12 sm:py-16 bg-slate-50 overflow-hidden">
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex flex-col lg:flex-row items-center gap-32">
-                        <div className="flex-1 space-y-12">
+                    <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+                        <div className="flex-1 space-y-6">
                             <motion.div 
                                 initial={{ opacity: 0, x: -50 }}
                                 whileInView={{ opacity: 1, x: 0 }}
-                                className="text-primary-600 font-black uppercase tracking-[0.4em] text-xs font-space"
+                                className="text-primary-600 font-bold uppercase text-xs font-sans"
                             >
                                 About CollegeMobi
                             </motion.div>
-                            <h2 className="text-5xl lg:text-7xl font-black text-slate-900 leading-[1] font-heading">Quality Beyond <br /> Measures</h2>
+                            <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 leading-[1.2] font-sans">Quality Beyond <br /> Measures</h2>
                             
-                            <div className="space-y-8 text-xl text-slate-600 leading-relaxed font-medium">
+                            <div className="space-y-6 text-base lg:text-lg text-slate-600 leading-relaxed font-medium">
                                 <p>
                                     CollegeMobi Online Education provides quality education to enhance the standard of living of the student and achieve their goals. CollegeMobi contribute their service to all the students providing better education with experienced faculty.
                                 </p>
-                                <p className="bg-white p-8 rounded-[2rem] border-l-8 border-primary-600 shadow-sm italic text-slate-900">
+                                <p className="bg-white p-6 rounded-[2rem] border-l-8 border-primary-600 shadow-sm italic text-slate-900">
                                     &ldquo;The guiding mission of CollegeMobi is deliver the absolute best experience and results for the students. We are not the company ourselves, but we fill a role that can be even more valuable in your life as the all-in-one resource to educate, connect, and facilitate your education.&rdquo;
                                 </p>
                                 {/* 
@@ -422,15 +407,15 @@ export default function HomePage() {
                                 */}
                             </div>
 
-                            <div className="flex flex-wrap gap-4">
-                                <Link to="/register" className="px-10 py-5 bg-slate-900 text-white rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-primary-600 transition-all shadow-xl">Start Your Journey</Link>
-                                <button className="px-10 py-5 bg-white text-slate-900 border border-slate-200 rounded-2xl font-black text-sm uppercase tracking-widest hover:border-primary-600 transition-all">Learn More</button>
+                            <div className="flex flex-wrap gap-4 pt-2">
+                                <Link to="/register" className="px-8 py-4 bg-slate-900 text-white rounded-xl font-black text-sm uppercase tracking-widest hover:bg-primary-600 transition-all shadow-xl">Start Your Journey</Link>
+                                <button className="px-8 py-4 bg-white text-slate-900 border border-slate-200 rounded-xl font-black text-sm uppercase tracking-widest hover:border-primary-600 transition-all">Learn More</button>
                             </div>
                         </div>
 
-                        <div className="flex-1 relative">
-                            <div className="relative z-10 grid grid-cols-2 gap-8">
-                                <div className="space-y-8 pt-16">
+                        <div className="flex-1 relative w-full">
+                            <div className="relative z-10 grid grid-cols-2 gap-4 sm:gap-6">
+                                <div className="space-y-6 pt-10">
                                     {/* 
                                     <motion.div 
                                         whileHover={{ scale: 0.95, rotate: -2 }}
@@ -442,24 +427,24 @@ export default function HomePage() {
                                     */}
                                     <motion.div 
                                         whileHover={{ scale: 0.95, rotate: 2 }}
-                                        className="rounded-[3rem] overflow-hidden shadow-2xl h-[300px]"
+                                        className="rounded-[2rem] overflow-hidden shadow-2xl h-[200px] sm:h-[240px]"
                                     >
                                         <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=2070&auto=format&fit=crop" alt="Edu" className="w-full h-full object-cover" />
                                     </motion.div>
                                 </div>
-                                <div className="space-y-8">
+                                <div className="space-y-6">
                                     <motion.div 
                                         whileHover={{ scale: 0.95, rotate: 2 }}
-                                        className="rounded-[3rem] overflow-hidden shadow-2xl h-[300px]"
+                                        className="rounded-[2rem] overflow-hidden shadow-2xl h-[200px] sm:h-[240px]"
                                     >
                                         <img src="https://images.unsplash.com/photo-1501504905252-473c47e087f8?q=80&w=2074&auto=format&fit=crop" alt="Edu" className="w-full h-full object-cover" />
                                     </motion.div>
                                     <motion.div 
                                         whileHover={{ scale: 0.95, rotate: -2 }}
-                                        className="bg-slate-900 p-8 rounded-[2.5rem] shadow-2xl flex flex-col justify-center text-white"
+                                        className="bg-slate-900 p-6 rounded-[2rem] shadow-2xl flex flex-col justify-center text-white"
                                     >
-                                        <p className="font-bold mb-4 opacity-80">CollegeMobi is following the best and updated curriculum of all the subjects.</p>
-                                        <div className="w-12 h-1 bg-primary-400" />
+                                        <p className="font-bold text-sm mb-3 opacity-80 leading-relaxed">CollegeMobi is following the best and updated curriculum of all the subjects.</p>
+                                        <div className="w-10 h-1 bg-primary-400" />
                                     </motion.div>
                                 </div>
                             </div>
@@ -486,30 +471,30 @@ export default function HomePage() {
             </section>
 
             {/* CTA Section */}
-            <section className="py-48 bg-white min-h-[85vh] flex items-center justify-center">
+            <section className="py-20 bg-white flex items-center justify-center font-sans">
                 <div className="max-w-[1600px] mx-auto px-4 sm:px-12 lg:px-20 w-full">
                     <motion.div 
                         whileHover={{ scale: 0.995 }}
-                        className="bg-slate-900 rounded-[5rem] p-24 lg:p-40 text-center relative overflow-hidden group shadow-[0_50px_120px_-30px_rgba(0,0,0,0.6)] w-full"
+                        className="bg-slate-900 rounded-[3rem] p-12 lg:p-20 text-center relative overflow-hidden group shadow-[0_50px_120px_-30px_rgba(0,0,0,0.6)] w-full"
                     >
                         <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary-600/20 rounded-full blur-[200px] group-hover:scale-110 transition-transform duration-1000" />
                         <div className="absolute bottom-0 left-0 w-[800px] h-[800px] bg-blue-600/20 rounded-full blur-[200px] group-hover:scale-110 transition-transform duration-1000" />
 
-                        <div className="relative z-10 w-full max-w-6xl mx-auto">
-                            <h2 className="text-6xl lg:text-[8rem] xl:text-[9rem] font-black text-white mb-12 tracking-[-0.04em] leading-[0.85] font-heading">
-                                Start Your <br /> Evolution Today
+                        <div className="relative z-10 w-full max-w-4xl mx-auto">
+                            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6 font-sans">
+                                Start Your Evolution Today
                             </h2>
-                            <p className="text-2xl lg:text-3xl text-slate-400 mb-20 max-w-4xl mx-auto font-medium leading-relaxed font-space">
+                            <p className="text-lg lg:text-xl text-slate-300 mb-10 max-w-3xl mx-auto font-medium leading-relaxed font-sans">
                                 Join the world&apos;s most innovative educational ecosystem. No limits, just potential.
                             </p>
-                            <div className="flex flex-col sm:flex-row items-center justify-center gap-10">
+                            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
                                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full sm:w-auto">
-                                    <Link to="/register" className="w-full sm:w-auto px-20 py-8 bg-white hover:bg-slate-50 text-slate-900 rounded-[3rem] font-black text-2xl transition-all shadow-2xl flex items-center justify-center gap-4 font-space whitespace-nowrap">
-                                        Join Now <ArrowRight size={32} />
+                                    <Link to="/register" className="w-full sm:w-auto px-8 py-4 bg-white hover:bg-slate-50 text-slate-900 rounded-xl font-bold text-base transition-all shadow-xl flex items-center justify-center gap-3 font-sans whitespace-nowrap">
+                                        Join Now <ArrowRight size={20} />
                                     </Link>
                                 </motion.div>
                                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full sm:w-auto">
-                                    <Link to="/login" className="w-full sm:w-auto px-20 py-8 bg-transparent border-2 border-slate-700 hover:border-slate-500 text-white rounded-[3rem] font-black text-2xl transition-all flex items-center justify-center gap-3 font-space whitespace-nowrap">
+                                    <Link to="/login" className="w-full sm:w-auto px-8 py-4 bg-transparent border-2 border-slate-700 hover:border-slate-500 text-white rounded-xl font-bold text-base transition-all flex items-center justify-center gap-3 font-sans whitespace-nowrap">
                                         Partner Portal
                                     </Link>
                                 </motion.div>
@@ -521,7 +506,7 @@ export default function HomePage() {
 
 
             {/* Footer */}
-            <footer className="py-20 sm:py-24 bg-slate-50 border-t border-slate-200">
+            <footer className="py-12 sm:py-16 bg-slate-50 border-t border-slate-200 font-sans">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid md:grid-cols-4 gap-12 sm:gap-20 mb-12 sm:mb-16">
                         <div className="col-span-2 space-y-10">
@@ -529,7 +514,7 @@ export default function HomePage() {
                                 <img src="https://www.collegemobi.com/images/logo.png" alt="CollegeMobi Logo" className="h-16 sm:h-20 w-auto object-contain" />
                             </div>
 
-                            <p className="text-slate-500 max-w-md font-medium text-xl leading-relaxed">
+                            <p className="text-slate-500 max-w-md font-medium text-base leading-relaxed">
                                 Redefining digital pedagogy through intelligent design and seamless user experience.
                             </p>
                             <div className="flex gap-6">
@@ -545,32 +530,32 @@ export default function HomePage() {
                             </div>
                         </div>
                         <div>
-                            <h4 className="font-black text-slate-900 uppercase tracking-[0.3em] text-xs mb-10 font-space">Explore</h4>
-                            <ul className="space-y-6">
-                                {['Features', 'Stats', 'About', 'Pricing'].map(l => (
+                            <h4 className="font-bold text-slate-900 uppercase text-xs mb-6 font-sans">Explore</h4>
+                            <ul className="space-y-4">
+                                {['Features', 'Stats', 'About'].map(l => (
                                     <li key={l}>
-                                        <button onClick={() => scrollToSection(l.toLowerCase())} className="text-slate-500 font-bold hover:text-primary-600 transition-colors uppercase tracking-[0.2em] text-[10px] font-space text-left">{l}</button>
+                                        <button onClick={() => scrollToSection(l.toLowerCase())} className="text-slate-500 font-medium hover:text-primary-600 transition-colors text-sm font-sans text-left">{l}</button>
                                     </li>
                                 ))}
                             </ul>
                         </div>
                         <div>
-                            <h4 className="font-black text-slate-900 uppercase tracking-[0.3em] text-xs mb-10 font-space">Contact</h4>
-                            <ul className="space-y-6 font-space">
-                                <li className="text-slate-500 font-bold text-[10px] uppercase tracking-[0.2em]">support@eduportal.com</li>
-                                <li className="text-slate-500 font-bold text-[10px] uppercase tracking-[0.2em]">+1 (555) 0123 4567</li>
-                                <li className="text-slate-500 font-bold text-[10px] uppercase tracking-[0.2em]">Tech District, Global</li>
+                            <h4 className="font-bold text-slate-900 uppercase text-xs mb-6 font-sans">Contact</h4>
+                            <ul className="space-y-4 font-sans">
+                                <li className="text-slate-500 font-medium text-sm">info@collegemobi.com</li>
+                                <li className="text-slate-500 font-medium text-sm">856-448-7350</li>
+                                <li className="text-slate-500 font-medium text-sm">Mt Laurel, NJ</li>
                             </ul>
                         </div>
                     </div>
-                    <div className="pt-12 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-10">
-                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] font-space">
-                            © 2026 COLLEGEMOBI EDU. Engineered for Excellence.
+                    <div className="pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-6">
+                        <p className="text-sm font-medium text-slate-400 font-sans">
+                            © 2026 COLLEGEMOBI. Engineered for Excellence.
                         </p>
-                        <div className="flex gap-10">
-                            <span className="text-[10px] font-black text-slate-400 hover:text-primary-600 uppercase tracking-[0.3em] font-space cursor-pointer transition-colors">Privacy</span>
-                            <span className="text-[10px] font-black text-slate-400 hover:text-primary-600 uppercase tracking-[0.3em] font-space cursor-pointer transition-colors">Terms</span>
-                            <span className="text-[10px] font-black text-slate-400 hover:text-primary-600 uppercase tracking-[0.3em] font-space cursor-pointer transition-colors">Legal</span>
+                        <div className="flex gap-6">
+                            <span className="text-sm font-medium text-slate-400 hover:text-primary-600 font-sans cursor-pointer transition-colors">Privacy</span>
+                            <span className="text-sm font-medium text-slate-400 hover:text-primary-600 font-sans cursor-pointer transition-colors">Terms</span>
+                            <span className="text-sm font-medium text-slate-400 hover:text-primary-600 font-sans cursor-pointer transition-colors">Legal</span>
                         </div>
                     </div>
                 </div>
